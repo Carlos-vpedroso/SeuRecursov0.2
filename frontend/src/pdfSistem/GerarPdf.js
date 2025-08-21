@@ -1345,7 +1345,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
         footer: Rodape
     };
 
-    // pdfMake.createPdf(docDefinitions).download(`Recurso ${DadosPessoais.nome}-${DadosPessoais.autoInfracao}`);
+    pdfMake.createPdf(docDefinitions).download(`Recurso ${DadosPessoais.nome}-${DadosPessoais.autoInfracao}`);
     pdfMake.createPdf(docDefinitions).open();
 }
 
