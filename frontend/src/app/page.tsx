@@ -158,14 +158,14 @@ export default function Home() {
 
   useEffect(() => {
     const termo = searchTerm.toLowerCase();
-    const filtrado = multas.filter((multa) =>
+    const filtrado = multasMock.filter((multa) =>
       multa.codigo_multa?.toLowerCase().includes(termo) ||
       multa.artigo_multa?.toLowerCase().includes(termo) ||
       multa.tipo_multa?.toLowerCase().includes(termo) ||
       multa.descricao?.toLowerCase().includes(termo)
     );
     setFilteredMultas(filtrado);
-  }, [searchTerm, multas]);
+  }, [searchTerm, multasMock]);
 
   return (
     <div>
