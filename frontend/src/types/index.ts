@@ -37,6 +37,7 @@ export interface Multa {
     tipo_multa: string;
     descricao: string;
     valor_multa: number;
+    valor_recurso: number;
 }
 
 export interface DadosUsuario {

@@ -13,10 +13,124 @@ import bannerMobile from '../../public/bannermobile.jpg'
 import MultasSkeleton from "@/components/MultasSkeleton";
 import { Multa } from "@/types";
 
+// DELETAR QUANDO FOR FAZER O APP REAL
+const multasMock: Multa[] = [
+  {
+    id: "0c535097-de61-4c4f-9473-5f134b7ca303",
+    artigo_multa: "Art. 203, V",
+    codigo_multa: "Cód 596-70",
+    valor_multa: 58.69,
+    valor_recurso: 58.69,
+    descricao: "Ultrapassar pela contramão linha de divisão de fluxos opostos, contínua amarela",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "1940c21b-d062-4663-91c9-c94b881e503f",
+    artigo_multa: "Art. 165-A",
+    codigo_multa: "Cód 757-90",
+    valor_multa: 68.97,
+    valor_recurso: 68.97,
+    descricao: "Recusar-se a ser submetido a teste, exame clínico, perícia ou outro procedimento que permita certificar influência de álcool ou outra substância psicoativa, na forma estabelecida pelo art. 277",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "1faafb89-c85d-43cf-9e67-39fa63169abc",
+    artigo_multa: "Art. 218, III",
+    codigo_multa: "Cód 746-30",
+    valor_multa: 58.69,
+    valor_recurso: 58.69,
+    descricao: "Transitar em velocidade superior à máxima permitida em mais de 50%",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "45cf8ce4-8bc8-440b-8b95-e89971230872",
+    artigo_multa: "Art. 252, § Único",
+    codigo_multa: "Cód 763-32",
+    valor_multa: 44.02,
+    valor_recurso: 44.02,
+    descricao: "Dirigir veículo manuseando telefone celular",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "65741a7d-00da-44f5-971a-694e6502dcb1",
+    artigo_multa: "Art. 218, II",
+    codigo_multa: "Cód 746-30",
+    valor_multa: 29.28,
+    valor_recurso: 29.28,
+    descricao: "Transitar em velocidade superior à máxima permitida em 20% até 50%",
+    tipo_multa: "Grave",
+  },
+  {
+    id: "73dc87fa-b7fb-4499-ae57-f4ed0f8e4fc8",
+    artigo_multa: "Art. 184, III",
+    codigo_multa: "Cód 758-70",
+    valor_multa: 44.02,
+    valor_recurso: 44.02,
+    descricao: "Transitar na faixa ou via de trânsito exclusivo, regulamentada com circulação destinada aos veículos de transporte público coletivo de passageiros",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "834280fe-e404-47b0-beea-38e0f0990bee",
+    artigo_multa: "Art. 181, XVII",
+    codigo_multa: "Cód 554-12",
+    valor_multa: 29.28,
+    valor_recurso: 29.28,
+    descricao: "Estacionar em desacordo com a regulamentação - estacionamento rotativo",
+    tipo_multa: "Grave",
+  },
+  {
+    id: "8b4081d8-db3c-47ad-8a34-078bb6ba8c60",
+    artigo_multa: "Art. 167",
+    codigo_multa: "Cód 518-51",
+    valor_multa: 29.28,
+    valor_recurso: 29.28,
+    descricao: "Deixar o condutor de usar o cinto de segurança, conforme previsto no art. 65",
+    tipo_multa: "Grave",
+  },
+  {
+    id: "d56775ac-8074-4fb7-ad48-9b49d83bad46",
+    artigo_multa: "Art. 169",
+    codigo_multa: "Cód 520-70",
+    valor_multa: 13.26,
+    valor_recurso: 13.26,
+    descricao: "Dirigir sem atenção ou sem os cuidados indispensáveis à segurança",
+    tipo_multa: "Leve",
+  },
+  {
+    id: "dc8d0386-66e3-4f3d-9678-008671085b68",
+    artigo_multa: "Art. 208",
+    codigo_multa: "Cód 605-01",
+    valor_multa: 44.02,
+    valor_recurso: 44.02,
+    descricao: "Avançar o sinal vermelho do semáforo (sem foto)",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "dfff6d42-0755-430d-b224-8de1043fc30d",
+    artigo_multa: "Art. 208",
+    codigo_multa: "Cód 605-03",
+    valor_multa: 44.02,
+    valor_recurso: 44.02,
+    descricao: "Avançar o sinal vermelho do semáforo - Fiscalização Eletrônica (com foto)",
+    tipo_multa: "Gravíssima",
+  },
+  {
+    id: "f885a564-5907-45ed-b611-1ae552749e8e",
+    artigo_multa: "Art. 218, I",
+    codigo_multa: "Cód 745-50",
+    valor_multa: 19.52,
+    valor_recurso: 19.52,
+    descricao: "Transitar em velocidade superior à máxima permitida em até 20%",
+    tipo_multa: "Média",
+  },
+];
+
+
 export default function Home() {
   const { setDadosFormulario, multas, loading } = useAuth();
 
-  const [filteredMultas, setFilteredMultas] = useState<Multa[]>(multas);
+  // const [filteredMultas, setFilteredMultas] = useState<Multa[]>(multas);
+  const [filteredMultas, setFilteredMultas] = useState<Multa[]>(multasMock);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
