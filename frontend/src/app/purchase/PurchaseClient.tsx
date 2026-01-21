@@ -92,17 +92,17 @@ function Purchase() {
                     </CardContent>
                 </Card>
 
-                <Card className="md:col-span-2 border border-gray-200 shadow-md rounded-xl">
+                {/* <Card className="md:col-span-2 border border-gray-200 shadow-md rounded-xl">
                     <CardContent className="space-y-2 pt-4">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2 text-center">Método de Pagamento</h2>
                         <Label>Cartão</Label>
                         <Input type="text" placeholder="Nº Cartão" />
                     </CardContent>
-                </Card>
+                </Card> */}
             </div>
 
             {/* Botão de Finalizar */}
-            <div className="pt-4 w-full justify-around flex">
+            {/* <div className="pt-4 w-full justify-around flex">
                 <Button
                     className="bg-red-500 hover:bg-red-700 text-white font-semibold text-lg px-8 py-4 rounded-xl cursor-pointer"
                     onClick={() => router.back()}
@@ -115,7 +115,7 @@ function Purchase() {
                 >
                     Finalizar Compra
                 </Button>
-            </div>
+            </div> */}
         </section>
     );
 }

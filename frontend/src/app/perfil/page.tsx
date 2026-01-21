@@ -23,7 +23,7 @@ const Perfil = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const resp = await fetch(`http://localhost:5555/registros/user/${user}`);
+                const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/registros/user/${user}`);
                 const data = await resp.json();
                 setDadosUser(data);
                 setCelular(data.telefone || "");
@@ -44,7 +44,7 @@ const Perfil = () => {
         }
 
         try {
-            const resposta = await fetch(`http://localhost:5555/registros/${dadosUser?.id}`, {
+            const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/registros/${dadosUser?.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Perfil = () => {
         }
 
         try {
-            const resposta = await fetch(`http://localhost:5555/registros/password/${dadosUser?.id}`, {
+            const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/registros/password/${dadosUser?.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

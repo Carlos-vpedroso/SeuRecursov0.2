@@ -17,7 +17,7 @@ export default function MultaPage() {
   const { dadosFormulario, setDadosFormulario } = useAuth()
 
   useEffect(() => {
-    fetch(`http://localhost:5555/multas/${id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/multas/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

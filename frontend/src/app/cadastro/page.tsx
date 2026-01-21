@@ -58,7 +58,7 @@ const Cadastro = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:5555/registros", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/registros`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

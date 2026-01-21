@@ -23,7 +23,7 @@
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.523.0",
-    "next": "15.3.4",
+    "next": "^16.1.4",
     "pdfmake": "^0.2.20",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

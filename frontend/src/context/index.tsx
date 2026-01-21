@@ -35,7 +35,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const fetchMultas = async () => {
         try {
             setLoading(true);
-            const resp = await fetch("http://localhost:5555/multas");
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/multas`);
             const data = await resp.json();
             setMultas(data);
             setErro(null);
@@ -65,7 +65,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                 return;
             }
 
-            const response = await fetch("http://localhost:5555/login", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
