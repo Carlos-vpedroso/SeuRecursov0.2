@@ -2,12 +2,13 @@
 import Image from "next/image"
 import logo from "../../public/LogoSeuRecurso.jpg"
 import Link from "next/link"
-import { useAuth } from "@/context"
 import { UserRound } from "lucide-react"
+import { UserContext } from "@/context/UserContext"
+import { useAuth } from "@/hook/useAuth"
 
 const Header = () => {
 
-    const { user, SignOut } = useAuth();
+    const { user, SignOut } = useAuth(UserContext);
 
     return (
         <div className="flex p-4 items-center justify-between md:justify-around bg-white">

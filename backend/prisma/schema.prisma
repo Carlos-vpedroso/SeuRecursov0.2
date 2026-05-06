@@ -1,0 +1,11 @@
+//npx prisma generate
+//npx prisma migrate dev --name nomeDaMigration
+//npx prisma db seed
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

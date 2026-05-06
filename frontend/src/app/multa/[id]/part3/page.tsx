@@ -1,7 +1,6 @@
 "use client"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/context"
 import {
     Select,
     SelectContent,
@@ -14,7 +13,11 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { DadosUsuario } from "@/types"
+import { Address, DadosUsuario } from "@/types"
+import { useMask } from "@/hook/useMask"
+import { useAuth } from "@/hook/useAuth"
+import { RecursoContext } from "@/context/RecursoContext"
+import { buscarCEP, validarCPF, validarRG } from "@/lib/utils"
 
 const estados = [
     { uf: "AC", nome: "Acre" },
@@ -48,140 +51,85 @@ const estados = [
 
 
 const Part3 = () => {
-    const { dadosFormulario } = useAuth();
+    const { dadosFormulario, dadosUsuario, setDadosUsuario, endereco, setEndereco, selectedMulta } = useAuth(RecursoContext);
+    const { cpf, phone, cep, rg } = useMask();
     const [erroCpf, setErroCpf] = useState("");
     const [erroRg, setErroRg] = useState("");
-
-    function validarCPF(cpf: string): boolean {
-        const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-        return regex.test(cpf);
-    }
-    function aplicarMascaraCPF(valor: string): string {
-        return valor
-            .replace(/\D/g, "") // remove não dígitos
-            .replace(/(\d{3})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    }
-    function validarRG(rg: string): boolean {
-        const regex = /^\d{2}\.\d{3}\.\d{3}-\d{1}$/;
-        return regex.test(rg);
-    }
-    function aplicarMascaraRG(valor: string): string {
-        return valor
-            .replace(/\D/g, "") // remove não dígitos
-            .replace(/(\d{2})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d)/, "$1.$2")
-            .replace(/(\d{3})(\d{1})$/, "$1-$2");
-    }
-    function aplicarMascaraCelular(valor: string): string {
-        return valor
-            .replace(/\D/g, "") // Remove tudo que não for dígito
-            .replace(/^(\d{2})(\d)/, "($1) $2") // Coloca os parênteses e espaço
-            .replace(/(\d{5})(\d)/, "$1-$2") // Coloca o traço
-            .slice(0, 15); // Limita a 15 caracteres totais
-    }
-
-    // Dados Usuário
-    const [nome, setNome] = useState("")
-    const [cpf, setCpf] = useState("")
-    const [rg, setRg] = useState("")
-    const [celular, setCelular] = useState("")
-    const [ufEmissao, setUfEmissao] = useState("")
-    const [autoInfracao, setAutoInfracao] = useState("")
-    const [placaVeiculo, setPlacaVeiculo] = useState("")
-    const [tipoUsuario, setTipoUsuario] = useState("")
-    const [solicitante, setSolicitante] = useState("")
-    //
-
-    // Dados Endereço
-    const [cep, setCep] = useState("");
-    const [logradouro, setLogradouro] = useState("");
-    const [numero, setNumero] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [cidade, setCidade] = useState("");
-    const [uf, setUf] = useState("");
-    const [errorCep, setErrorCep] = useState("");
-    //
+    const [erroCep, setErroCep] = useState("");
 
     const router = useRouter()
 
-    const isFormularioIncompleto =
-        nome === '' ||
-        cpf === '' ||
-        rg === '' ||
-        celular === '' ||
-        ufEmissao === '' ||
-        autoInfracao === '' ||
-        placaVeiculo === '' ||
-        tipoUsuario === '' ||
-        solicitante === '' ||
-        cep === '' ||
-        logradouro === '' ||
-        numero === '' ||
-        bairro === '' ||
-        cidade === '' ||
-        uf === '' ||
-        erroCpf !== '' ||
-        erroRg !== '';
+    const handleChangeUsuario = (campo: keyof DadosUsuario, valor: string) => {
+        setDadosUsuario((prev) => ({
+            ...prev,
+            [campo]: valor,
+        }));
+    };
 
-
-    function codificarDados(dados: DadosUsuario) {
-        const json = JSON.stringify(dados);
-        return encodeURIComponent(btoa(json));
-    }
+    const handleChangeEndereco = (campo: keyof Address, valor: string) => {
+        setEndereco((prev) => ({
+            ...prev,
+            [campo]: valor,
+        }));
+    };
 
     function handleContinuar() {
-        const dados = {
-            nome, cpf, rg, celular, ufEmissao,
-            autoInfracao, placaVeiculo, tipoUsuario, solicitante,
-            cep, logradouro, numero, bairro, cidade, uf,
-        };
+        if (isFormularioIncompleto) return;
 
-        const dadosCodificados = codificarDados(dados);
-        router.push(`/purchase?dados=${dadosCodificados}`);
-    };
+        console.log("Dados:", {
+            dadosUsuario,
+            endereco,
+            dadosFormulario,
+            selectedMulta
+        });
 
-    const buscarEndereco = async (cep: string) => {
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
+        router.push(`/purchase`);
+    }
 
-            if (data.erro) {
-                setErrorCep("Cep não encontrado")
-                setLogradouro("");
-                setBairro("");
-                setCidade("");
-                setUf("");
-            } else {
-                setErrorCep("")
-                setLogradouro(data.logradouro || "");
-                setBairro(data.bairro || "");
-                setCidade(data.localidade || "");
-                setUf(data.uf || "");
-            }
-        } catch {
-            setErrorCep("Erro ao buscar endereço")
-            setLogradouro("");
-            setBairro("");
-            setCidade("");
-            setUf("");
-        }
-    };
+    let timeout: NodeJS.Timeout;
 
     const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const novoCep = e.target.value.replace(/\D/g, ""); // remove não dígitos
-        setCep(novoCep);
+        const valor = cep(e.target.value);
+        handleChangeEndereco("cep", valor);
 
-        if (novoCep.length === 8) {
-            buscarEndereco(novoCep);
-        } else {
-            setLogradouro("");
-            setBairro("");
-            setCidade("");
-            setUf("");
+        const cepLimpo = valor.replace(/\D/g, "");
+
+        clearTimeout(timeout);
+
+        if (cepLimpo.length === 8) {
+            timeout = setTimeout(async () => {
+                const response = await buscarCEP(cepLimpo);
+
+                if (!response.success || response.data.erro) {
+                    setErroCep("CEP não encontrado");
+                    return;
+                }
+
+                const data = response.data;
+
+                setEndereco((prev) => ({
+                    ...prev,
+                    logradouro: data.logradouro || "",
+                    bairro: data.bairro || "",
+                    cidade: data.localidade || "",
+                    uf: data.uf || "",
+                }));
+
+                setErroCep("");
+            }, 500); // espera 500ms
         }
     };
+
+    function validarFormulario() {
+        const camposUsuario = Object.values(dadosUsuario).every(Boolean);
+        const camposEndereco = Object.values(endereco).every(Boolean);
+
+        const semErros = !erroCpf && !erroRg && !erroCep;
+
+        return camposUsuario && camposEndereco && semErros;
+    }
+
+    const isFormularioIncompleto = !validarFormulario();
 
 
     return (
@@ -192,8 +140,8 @@ const Part3 = () => {
                     <h1 className="font-bold text-xl">Preencha os dados do Requerente</h1>
                 </div>
                 <div className="bg-cinza px-[25px] py-2 rounded-md my-4">
-                    <h1 className="font-bold my-2 text-xl">{dadosFormulario.descricao}</h1>
-                    <p className="text-gray-500 font-semibold text-sm">Infração {dadosFormulario.tipoMulta} / {dadosFormulario.tipoDefesa}</p>
+                    <h1 className="font-bold my-2 text-xl">{selectedMulta?.descricao}</h1>
+                    <p className="text-gray-500 font-semibold text-sm">Infração {selectedMulta?.tipo_multa} / {dadosFormulario.tipoDefesa}</p>
                 </div>
                 <div>
                     <h1 className="font-bold text-2xl text-center">Dados do Condutor ou do Proprietário do veículo</h1>
@@ -206,8 +154,8 @@ const Part3 = () => {
                             id="nome"
                             name="nome"
                             placeholder="Seu nome"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
+                            value={dadosUsuario.nome}
+                            onChange={(e) => handleChangeUsuario("nome", e.target.value)}
                             className="w-full"
                             required
                         />
@@ -219,10 +167,10 @@ const Part3 = () => {
                             id="celular"
                             name="celular"
                             placeholder="(11) 91234-5678"
-                            value={celular}
+                            value={dadosUsuario.celular}
                             onChange={(e) => {
-                                const formatado = aplicarMascaraCelular(e.target.value);
-                                setCelular(formatado);
+                                const formatado = phone(e.target.value);
+                                handleChangeUsuario("celular", formatado)
                             }}
                             className="w-full"
                             maxLength={15}
@@ -238,10 +186,10 @@ const Part3 = () => {
                                 id="rg"
                                 name="rg"
                                 placeholder="12.345.678-9"
-                                value={rg}
+                                value={dadosUsuario.rg}
                                 onChange={(e) => {
-                                    const valorComMascara = aplicarMascaraRG(e.target.value);
-                                    setRg(valorComMascara);
+                                    const valorComMascara = rg(e.target.value);
+                                    handleChangeUsuario("rg", valorComMascara)
                                     if (valorComMascara.length > 0 && !validarRG(valorComMascara)) {
                                         setErroRg("Formato de RG inválido.");
                                     } else {
@@ -258,7 +206,7 @@ const Part3 = () => {
 
                         <div className="min-w-[50%] pl-1">
                             <Label>UF de Emissão</Label>
-                            <Select value={ufEmissao} onValueChange={setUfEmissao} required>
+                            <Select value={dadosUsuario.ufEmissao} onValueChange={(value) => handleChangeUsuario("ufEmissao", value)} required>
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Selecione" />
                                 </SelectTrigger>
@@ -279,10 +227,10 @@ const Part3 = () => {
                             id="cpf"
                             name="cpf"
                             placeholder="000.000.000-00"
-                            value={cpf}
+                            value={dadosUsuario.cpf}
                             onChange={(e) => {
-                                const valorComMascara = aplicarMascaraCPF(e.target.value);
-                                setCpf(valorComMascara);
+                                const valorComMascara = cpf(e.target.value);
+                                handleChangeUsuario("cpf", valorComMascara)
                                 if (valorComMascara.length > 0 && !validarCPF(valorComMascara)) {
                                     setErroCpf("Formato de CPF inválido.");
                                 } else {
@@ -305,18 +253,18 @@ const Part3 = () => {
                                 id="cep"
                                 name="cep"
                                 placeholder="Digite seu CEP"
-                                value={cep}
+                                value={endereco.cep}
                                 onChange={handleCepChange}
-                                maxLength={8}
+                                maxLength={9}
                                 className={`
                                     w-full
-                                    ${errorCep === "" && cep.length === 8 ? 'border-green-200 border-2' : ''}
-                                    ${errorCep !== "" ? 'border-red-400' : ''}
+                                    ${erroCep === "" && endereco.cep.replace(/\D/g, "").length === 8 ? 'border-green-200 border-2' : ''}
+                                    ${erroCep !== "" ? 'border-red-400' : ''}
                                 `}
                                 required
                             />
-                            {errorCep && (
-                                <p className="text-sm font-semibold text-red-400 mt-1">{errorCep}</p>
+                            {erroCep && (
+                                <p className="text-sm font-semibold text-red-400 mt-1">{erroCep}</p>
                             )}
                         </div>
                         <div className="min-w-[50%] pl-1">
@@ -325,8 +273,8 @@ const Part3 = () => {
                                 type="text"
                                 id="endereco"
                                 name="endereco"
-                                value={logradouro}
-                                onChange={(e) => setLogradouro(e.target.value)}
+                                value={endereco.logradouro}
+                                onChange={(e) => handleChangeEndereco("logradouro", e.target.value)}
                                 placeholder="Rua, Av., etc."
                                 className="w-full"
                             />
@@ -339,8 +287,8 @@ const Part3 = () => {
                                 type="text"
                                 id="bairro"
                                 name="bairro"
-                                value={bairro}
-                                onChange={(e) => setBairro(e.target.value)}
+                                value={endereco.bairro}
+                                onChange={(e) => handleChangeEndereco("bairro", e.target.value)}
                                 className="w-full"
                             />
                         </div>
@@ -350,8 +298,8 @@ const Part3 = () => {
                                 type="text"
                                 id="numero"
                                 name="numero"
-                                value={numero}
-                                onChange={(e) => setNumero(e.target.value)}
+                                value={endereco.numero}
+                                onChange={(e) => handleChangeEndereco("numero", e.target.value)}
                                 placeholder="Número"
                             />
                         </div>
@@ -359,7 +307,7 @@ const Part3 = () => {
                     <div className="flex justify-between">
                         <div className="min-w-[50%] pr-1">
                             <Label>Estado</Label>
-                            <Select value={uf} onValueChange={setUf} required disabled>
+                            <Select value={endereco.uf} onValueChange={(value) => handleChangeEndereco("uf", value)} required disabled>
                                 <SelectTrigger className="w-full bg-gray-100">
                                     <SelectValue placeholder="Selecione o Estado" />
                                 </SelectTrigger>
@@ -378,8 +326,8 @@ const Part3 = () => {
                                 type="text"
                                 id="cidade"
                                 name="cidade"
-                                value={cidade}
-                                onChange={(e) => setCidade(e.target.value)}
+                                value={endereco.cidade}
+                                onChange={(e) => handleChangeEndereco("cidade", e.target.value)}
                                 className="w-full bg-gray-100"
                                 disabled
                             />
@@ -392,7 +340,7 @@ const Part3 = () => {
                             id="auto"
                             name="auto"
                             placeholder="Auto de Infração"
-                            onChange={(e) => setAutoInfracao(e.target.value)}
+                            onChange={(e) => handleChangeUsuario("autoInfracao", e.target.value)}
                             className="w-full"
                             required
                         />
@@ -404,14 +352,14 @@ const Part3 = () => {
                             id="placa"
                             name="placa"
                             placeholder="Placa do Veículo"
-                            onChange={(e) => setPlacaVeiculo(e.target.value)}
+                            onChange={(e) => handleChangeUsuario("placaVeiculo", e.target.value)}
                             className="w-full"
                             required
                         />
                     </div>
                     <div>
                         <h1 className="font-semibold text-sm text-center mb-1">Escolha uma das opções abaixo?</h1>
-                        <RadioGroup className="flex w-full justify-center" onValueChange={setTipoUsuario}>
+                        <RadioGroup className="flex w-full justify-center" onValueChange={(value) => handleChangeUsuario("tipoUsuario", value)}>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="Pessoa Física" id="PF" />
                                 <Label htmlFor="PF" className="text-gray-500">{"PF (Pessoa Física)"}</Label>
@@ -424,7 +372,7 @@ const Part3 = () => {
                     </div>
                     <div>
                         <h1 className="font-semibold text-sm text-center mb-1">Você é procurador do condutor?</h1>
-                        <RadioGroup className="flex w-full justify-center" onValueChange={setSolicitante}>
+                        <RadioGroup className="flex w-full justify-center" onValueChange={(value) => handleChangeUsuario("solicitante", value)}>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="Procurador" id="Procurador" />
                                 <Label htmlFor="Procurador" className="text-gray-500">Sim</Label>

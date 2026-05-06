@@ -3,10 +3,14 @@ import Image from "next/image";
 import logoSeuRecurso from "../../../public/LogoSeuRecurso2.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormControl, FormLabel, FormMessage } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/context";
+import { useAuth } from "@/hook/useAuth";
+import { UserContext } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 
 interface LoginForm {
   email: string;
@@ -14,17 +18,28 @@ interface LoginForm {
 }
 
 const Login = () => {
-  const { SignIn } = useAuth();
+  const router = useRouter();
+  const { SignIn } = useAuth(UserContext);
 
-  const form = useForm<LoginForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: LoginForm) => {
-    SignIn(values.email, values.password);
+  const onSubmit = async (values: LoginForm) => {
+    const result = await SignIn(values.email, values.password);
+  
+    if (result.success) {
+      router.push("/"); // redireciona para home
+    } else {
+      toast.error(result.message); // ou mostrar toast/erro
+    }
   };
 
   return (
@@ -43,51 +58,50 @@ const Login = () => {
           <p className="text-gray-500 text-sm">Entre com seus dados ou registre-se</p>
         </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-6">
-            {/* Campo Email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Digite seu email" type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
+          {/* Email */}
+          <div>
+            <Label className="block text-sm font-medium">Email</Label>
+            <Input
+              type="email"
+              placeholder="Digite seu email"
+              {...register("email", { required: "Email é obrigatório" })}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
 
-            {/* Campo Senha */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Senha</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Digite sua senha" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          {/* Senha */}
+          <div>
+            <Label className="block text-sm font-medium">Senha</Label>
+            <Input
+              type="password"
+              placeholder="Digite sua senha"
+              {...register("password", { required: "Senha é obrigatória" })}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
 
-            <div className="flex justify-between items-center pt-2">
-              <Button type="submit" className="bg-azul text-white font-bold">
-                Entrar
-              </Button>
-              <Link
-                href="/cadastro"
-                className="text-azul font-semibold text-sm hover:underline"
-              >
-                Criar nova conta
-              </Link>
-            </div>
-          </form>
-        </Form>
+          <div className="flex justify-between items-center pt-2">
+            <Button type="submit" className="bg-azul text-white font-bold">
+              Entrar
+            </Button>
+
+            <Link
+              href="/cadastro"
+              className="text-azul font-semibold text-sm hover:underline"
+            >
+              Criar nova conta
+            </Link>
+          </div>
+        </form>
       </div>
     </section>
   );

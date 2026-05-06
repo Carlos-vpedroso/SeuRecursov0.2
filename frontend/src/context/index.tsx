@@ -47,8 +47,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-
-
     useEffect(() => {
         fetchMultas();
         const token = Cookies.get("token");

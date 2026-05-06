@@ -1,57 +1,30 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Multa } from "@/types";
+import { useAuth } from "@/hook/useAuth";
+import { RecursoContext } from "@/context/RecursoContext";
+import { formatCurrency } from "@/lib/utils";
 
 export default function MultaPage() {
   const params = useParams();
   const id = params.id as string;
   const router = useRouter()
 
-  const [multa, setMulta] = useState<Multa | null>(null)
+
   const [error, setError] = useState<string | null>(null)
-  const { dadosFormulario, setDadosFormulario } = useAuth()
-
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/multas/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (resp) => {
-        if (!resp.ok) throw new Error('Erro ao buscar multa');
-        const data = await resp.json();
-        setMulta(data);
-        setDadosFormulario(prev => ({
-          ...prev,
-          artigoMulta: data.artigo_multa,
-          codigoMulta: data.codigo_multa,
-          valorMulta: data.valor_multa,
-          valorRecurso: data.valor_recurso,
-          descricao: data.descricao,
-          tipoMulta: data.tipo_multa,
-        }));
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Não foi possível carregar a multa.');
-      });
-  }, [id, setDadosFormulario]);
+  const { dadosFormulario, setDadosFormulario, selectedMulta } = useAuth(RecursoContext)
 
 
-  const valorMulta = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(dadosFormulario.valorMulta);
-  const valorRecurso = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(dadosFormulario.valorRecurso);
+  const valorMulta = selectedMulta != null
+    ? formatCurrency(selectedMulta.valor_multa)
+    : null;
+  const valorRecurso = selectedMulta != null
+    ? formatCurrency(selectedMulta.valor_recurso)
+    : null;
 
 
   function alterarTipoDefesa(e: React.ChangeEvent<HTMLInputElement>) {
@@ -77,7 +50,7 @@ export default function MultaPage() {
     );
   }
 
-  if (!multa) {
+  if (!selectedMulta) {
     return (
       <section className="flex items-center justify-center min-h-screen">
         <p>Carregando...</p>
@@ -95,23 +68,23 @@ export default function MultaPage() {
         </div>
         <div>
           <div className="my-2">
-            <h1 className="font-bold text-xl">{multa.descricao}</h1>
+            <h1 className="font-bold text-xl">{selectedMulta.descricao}</h1>
             <div className="text-gray-500 font-bold my-2">
-              {multa.tipo_multa === 'Gravíssima' &&
+              {selectedMulta.tipo_multa === 'GRAVISSIMA' &&
                 <p><span>7 Pontos</span>, Infração Gravíssima</p>}
-              {multa.tipo_multa === 'Grave' &&
+              {selectedMulta.tipo_multa === 'GRAVE' &&
                 <p><span>5 Pontos</span>, Infração Grave</p>}
-              {multa.tipo_multa === 'Média' &&
+              {selectedMulta.tipo_multa === 'MEDIA' &&
                 <p><span>3 Pontos</span>, Infração Média</p>}
-              {multa.tipo_multa === 'Leve' &&
+              {selectedMulta.tipo_multa === 'LEVE' &&
                 <p><span>2 Pontos</span>, Infração Leve</p>}
             </div>
           </div>
 
           <div className="border border-solid border-gray-300 rounded-md shadow-md py-2 px-2">
             <div className="flex">
-              <p className="mr-4">Artigo : <span className="font-bold text-lg">{multa.artigo_multa}</span></p>
-              <p className="mr-4">Código : <span className="font-bold text-lg">{multa.codigo_multa}</span></p>
+              <p className="mr-4">Artigo : <span className="font-bold text-lg">{selectedMulta.artigo_multa}</span></p>
+              <p className="mr-4">Código : <span className="font-bold text-lg">{selectedMulta.codigo_multa}</span></p>
             </div>
             <p>Valor da Multa : <span className="font-bold text-lg text-red-900">{valorMulta}</span></p>
             <p>Valor do Recurso : <span className="font-bold text-lg text-green-900">{valorRecurso}</span></p>

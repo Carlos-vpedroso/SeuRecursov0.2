@@ -1,2 +1,8 @@
-/node_modules
+node_modules
 .env
+/dist
+SEURECURSO.cer
+certificado.pfx
+certificado_base64.txt
+
+/generated/prisma

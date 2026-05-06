@@ -1,37 +1,13 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import 'pdfmake/build/vfs_fonts'
 
-const GerarPdf = (InfoCliente, DadosPessoais) => {
+const GerarPdf = (dadosRecurso, dadosUsuario, endereco, selectedMulta) => {
     const hoje = new Date();
     const dataFormatada = hoje.toLocaleDateString('pt-BR');
-    /*
-    const DadosPessoais = {
-        autoInfracao: '',
-        bairro: '',
-        celular: '',
-        cep: '',
-        cidade: '',
-        cpf: '',
-        logradouro: '',
-        nome: '',
-        numero: '',
-        placaVeiculo: '',
-        rg: '',
-        solicitante: ''
-        tipoUsuario: '',
-        uf: '',
-        ufEmissao: ''
-        } 
+    console.log(selectedMulta)
     
-
-    
-    const InfoCliente = {
-        artigoMulta: multa.artigo_multa,
-        codigoMulta: multa.codigo_multa,
-        valorMulta: multa.valor_multa,
-        valorRecurso: multa.valor_recurso,
-        descricao: multa.descricao,
-        tipoMulta: multa.tipo_multa,
+    /* 
+    dadosFormulario: {
         tipoDefesa: '',
         fato: '',
         fatoComentario: '',
@@ -41,7 +17,27 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
         acessoAuto: '',
         patio: '',
         patioComentario: ''
-        }
+    },
+    dadosUsuario: {
+        nome: "",
+        cpf: "",
+        rg: "",
+        celular: "",
+        ufEmissao: "",
+        autoInfracao: "",
+        placaVeiculo: "",
+        tipoUsuario: "",
+        solicitante: "",
+    },
+    endereco: {
+        cep: "",
+        logradouro: "",
+        numero: "",
+        bairro: "",
+        cidade: "",
+        uf: ""
+    },
+
     */
 
 
@@ -50,9 +46,9 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
     ];
 
-    function Body(InfoCliente) {
-        if (InfoCliente.notificado === 'NÃO') {
-            if (InfoCliente.descricao === 'Dirigir veículo com validade de CNH/PPD vencida há mais de 30 dias') {
+    function Body(dadosRecurso) {
+        if (dadosRecurso.notificado === 'NÃO') {
+            if (selectedMulta.descricao === 'Dirigir veículo com validade de CNH/PPD vencida há mais de 30 dias') {
                 return [
 
                     {
@@ -60,23 +56,23 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
                         style: 'header'
                     },
 
-                    { text: ['Auto de Infração', { text: ` ${DadosPessoais.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${DadosPessoais.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${DadosPessoais.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
-                        { text: `${DadosPessoais.cpf}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
-                        { text: `${DadosPessoais.rg}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.rg}`, style: 'dadosVariaveis' },
                             ', ',
-                        { text: `${DadosPessoais.solicitante}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.solicitante}`, style: 'dadosVariaveis' },
                             ' do veículo de placa ',
-                        { text: `${DadosPessoais.placaVeiculo}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.placaVeiculo}`, style: 'dadosVariaveis' },
                             ', vem respeitosamente a presença de Vossa Senhoria, com fundamento na Constituição da República, Lei 9.503/97 e demais dispositivos aplicáveis à espécie, interpor a presente:'], style: 'paragrafos'
                     },
 
                     {
-                        text: `${InfoCliente.tipoDefesa}`,
+                        text: `${dadosRecurso.tipoDefesa}`,
                         style: 'title1'
                     },
 
@@ -103,9 +99,9 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     {
                         text: ['Fui autuado por supostamente ',
-                            { text: `${InfoCliente.descricao}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.descricao}`, style: 'dadosVariaveis' },
                             ' , infração prevista no artigo ',
-                            { text: `${InfoCliente.artigoMulta}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.artigo_multa}`, style: 'dadosVariaveis' },
                             ' do Código de Trânsito Brasileiro. '], style: 'paragrafos'
                     },
 
@@ -368,7 +364,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     },
 
-                    { text: `${DadosPessoais.cidade}-${DadosPessoais.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
+                    { text: `${endereco.cidade}-${endereco.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Nesses termos, ', style: 'paragrafosCentral' },
 
@@ -376,7 +372,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${DadosPessoais.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -389,23 +385,23 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
                     style: 'header'
                 },
 
-                { text: ['Auto de Infração', { text: ` ${DadosPessoais.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                { text: ['Recorrente:', { text: ` ${DadosPessoais.solicitante}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                { text: ['Recorrente:', { text: ` ${dadosUsuario.solicitante}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                 {
-                    text: [{ text: `${DadosPessoais.nome}`, style: 'dadosVariaveis' },
+                    text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
                         ', brasileiro, portador do CPF ',
-                    { text: `${DadosPessoais.cpf}`, style: 'dadosVariaveis' },
+                    { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                         ' do RG ',
-                    { text: `${DadosPessoais.rg}`, style: 'dadosVariaveis' },
+                    { text: `${dadosUsuario.rg}`, style: 'dadosVariaveis' },
                         ', ',
-                    { text: `${DadosPessoais.solicitante}`, style: 'dadosVariaveis' },
+                    { text: `${dadosUsuario.solicitante}`, style: 'dadosVariaveis' },
                         ' do veículo de placa ',
-                    { text: `${DadosPessoais.placaVeiculo}`, style: 'dadosVariaveis' },
+                    { text: `${dadosUsuario.placaVeiculo}`, style: 'dadosVariaveis' },
                         ', vem respeitosamente a presença de Vossa Senhoria, com fundamento na Constituição da República, Lei 9.503/97 e demais dispositivos aplicáveis à espécie, interpor a presente:'], style: 'paragrafos'
                 },
 
                 {
-                    text: `${InfoCliente.tipoDefesa}`,
+                    text: `${dadosRecurso.tipoDefesa}`,
                     style: 'title1'
                 },
 
@@ -432,9 +428,9 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                 {
                     text: ['Fui autuado por supostamente ',
-                        { text: `${InfoCliente.descricao}`, style: 'dadosVariaveis' },
+                        { text: `${selectedMulta.descricao}`, style: 'dadosVariaveis' },
                         ' , infração prevista no artigo ',
-                        { text: `${InfoCliente.artigoMulta}`, style: 'dadosVariaveis' },
+                        { text: `${selectedMulta.artigo_multa}`, style: 'dadosVariaveis' },
                         ' do Código de Trânsito Brasileiro. '], style: 'paragrafos'
                 },
 
@@ -663,7 +659,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                 },
 
-                { text: `${DadosPessoais.cidade}-${DadosPessoais.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
+                { text: `${endereco.cidade}-${endereco.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
 
                 { text: 'Nesses termos, ', style: 'paragrafosCentral' },
 
@@ -671,13 +667,13 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                 { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                { text: `${DadosPessoais.nome}`, style: 'paragrafosVarCentral' },
+                { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
 
                 { text: 'Recorrente', style: 'paragrafosCentral' }
 
             ];
         } else {
-            if (InfoCliente.descricao === 'Dirigir veículo com validade de CNH/PPD vencida há mais de 30 dias') {
+            if (selectedMulta.descricao === 'Dirigir veículo com validade de CNH/PPD vencida há mais de 30 dias') {
                 return [
 
                     {
@@ -685,23 +681,23 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
                         style: 'header'
                     },
 
-                    { text: ['Auto de Infração', { text: ` ${DadosPessoais.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${DadosPessoais.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${DadosPessoais.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
-                        { text: `${DadosPessoais.cpf}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
-                        { text: `${DadosPessoais.rg}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.rg}`, style: 'dadosVariaveis' },
                             ', ',
-                        { text: `${DadosPessoais.solicitante}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.solicitante}`, style: 'dadosVariaveis' },
                             ' do veículo de placa ',
-                        { text: `${DadosPessoais.placaVeiculo}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.placaVeiculo}`, style: 'dadosVariaveis' },
                             ', vem respeitosamente a presença de Vossa Senhoria, com fundamento na Constituição da República, Lei 9.503/97 e demais dispositivos aplicáveis à espécie, interpor a presente:'], style: 'paragrafos'
                     },
 
                     {
-                        text: `${InfoCliente.tipoDefesa}`,
+                        text: `${dadosRecurso.tipoDefesa}`,
                         style: 'title1'
                     },
 
@@ -728,9 +724,9 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     {
                         text: ['Fui autuado por supostamente ',
-                            { text: `${InfoCliente.descricao}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.descricao}`, style: 'dadosVariaveis' },
                             ' , infração prevista no artigo ',
-                            { text: `${InfoCliente.artigoMulta}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.artigo_multa}`, style: 'dadosVariaveis' },
                             ' do Código de Trânsito Brasileiro. '], style: 'paragrafos'
                     },
 
@@ -965,7 +961,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     },
 
-                    { text: `${DadosPessoais.cidade}-${DadosPessoais.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
+                    { text: `${endereco.cidade}-${endereco.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Nesses termos, ', style: 'paragrafosCentral' },
 
@@ -973,7 +969,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${DadosPessoais.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -986,23 +982,23 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
                         style: 'header'
                     },
 
-                    { text: ['Auto de Infração', { text: ` ${DadosPessoais.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${DadosPessoais.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${DadosPessoais.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
-                        { text: `${DadosPessoais.cpf}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
-                        { text: `${DadosPessoais.rg}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.rg}`, style: 'dadosVariaveis' },
                             ', ',
-                        { text: `${DadosPessoais.solicitante}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.solicitante}`, style: 'dadosVariaveis' },
                             ' do veículo de placa ',
-                        { text: `${DadosPessoais.placaVeiculo}`, style: 'dadosVariaveis' },
+                        { text: `${dadosUsuario.placaVeiculo}`, style: 'dadosVariaveis' },
                             ', vem respeitosamente a presença de Vossa Senhoria, com fundamento na Constituição da República, Lei 9.503/97 e demais dispositivos aplicáveis à espécie, interpor a presente:'], style: 'paragrafos'
                     },
 
                     {
-                        text: `${InfoCliente.tipoDefesa}`,
+                        text: `${dadosRecurso.tipoDefesa}`,
                         style: 'title1'
                     },
 
@@ -1029,9 +1025,9 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     {
                         text: ['Fui autuado por supostamente ',
-                            { text: `${InfoCliente.descricao}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.descricao}`, style: 'dadosVariaveis' },
                             ' , infração prevista no artigo ',
-                            { text: `${InfoCliente.artigoMulta}`, style: 'dadosVariaveis' },
+                            { text: `${selectedMulta.artigo_multa}`, style: 'dadosVariaveis' },
                             ' do Código de Trânsito Brasileiro. '], style: 'paragrafos'
                     },
 
@@ -1232,7 +1228,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     },
 
-                    { text: `${DadosPessoais.cidade}-${DadosPessoais.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
+                    { text: `${endereco.cidade}-${endereco.uf}, ${dataFormatada}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Nesses termos, ', style: 'paragrafosCentral' },
 
@@ -1240,7 +1236,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${DadosPessoais.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -1268,7 +1264,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
 
 
         header: [title],
-        content: Body(InfoCliente),
+        content: Body(dadosRecurso),
         styles: {
             header: {
                 fontSize: 16,
@@ -1345,7 +1341,7 @@ const GerarPdf = (InfoCliente, DadosPessoais) => {
         footer: Rodape
     };
 
-    pdfMake.createPdf(docDefinitions).download(`Recurso ${DadosPessoais.nome}-${DadosPessoais.autoInfracao}`);
+    pdfMake.createPdf(docDefinitions).download(`Recurso ${dadosUsuario.nome}-${dadosUsuario.autoInfracao}`);
     pdfMake.createPdf(docDefinitions).open();
 }
 

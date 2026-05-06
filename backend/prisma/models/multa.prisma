@@ -1,0 +1,21 @@
+model Multa {
+    id            String    @id @default(uuid())
+    artigo_multa  String    @unique
+    codigo_multa  String    @unique
+    valor_multa   Decimal   @db.Decimal(10, 2)
+    valor_recurso Decimal   @db.Decimal(10, 2)
+    descricao     String
+    tipo_multa    TipoMulta @default(LEVE)
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    pagamentos Pagamento[]
+    recursos Recurso[]
+}
+
+enum TipoMulta {
+    LEVE
+    MEDIA
+    GRAVE
+    GRAVISSIMA
+}

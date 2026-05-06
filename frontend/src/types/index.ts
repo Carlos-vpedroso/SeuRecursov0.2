@@ -13,12 +13,6 @@ export interface AuthContextType {
 }
 
 export interface DadosFormulario {
-    artigoMulta: string;
-    codigoMulta: string;
-    valorMulta: number;
-    valorRecurso: number;
-    descricao: string;
-    tipoMulta: string;
     tipoDefesa: string;
     fato: string;
     fatoComentario: string;
@@ -34,11 +28,12 @@ export interface Multa {
     id: UUID;
     codigo_multa: string;
     artigo_multa: string;
-    tipo_multa: string;
+    tipo_multa: TipoMulta;
     descricao: string;
-    valor_multa: number;
-    valor_recurso: number;
+    valor_multa: string;
+    valor_recurso: string;
 }
+export type TipoMulta = "LEVE" | "MEDIA" | "GRAVE" | "GRAVISSIMA";
 
 export interface DadosUsuario {
     nome: string;
@@ -50,6 +45,9 @@ export interface DadosUsuario {
     placaVeiculo: string;
     tipoUsuario: string;
     solicitante: string;
+}
+
+export interface Address {
     cep: string;
     logradouro: string;
     numero: string;
@@ -59,11 +57,22 @@ export interface DadosUsuario {
 }
 
 export interface DadosUser {
-  id: string;
-  username: string;
-  useremail: string;
-  password: string;
-  telefone: string | null;
-  createdAt: string; 
-  updatedAt: string; 
+    id: string;
+    nome: string;
+    email: string;
+    telefone?: string | null;
+    provider: Providers;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export type Providers = "LOCAL" | "GOOGLE"
+
+export interface RecursoResponse {
+    nome: string;
+    autoInfracao: string;
+    multa: Multa;
+    payment?: {
+        paidAt: string | null; // vem como string no JSON
+    }
 }

@@ -1,10 +1,11 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/context"
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hook/useAuth";
+import { RecursoContext } from "@/context/RecursoContext";
 
 
 const Part2 = () => {
@@ -12,7 +13,7 @@ const Part2 = () => {
     const id = params.id
     const [errorComentario, setErrorComentario] = useState<string | null>(null);
     const [errorPatio, setErrorPatio] = useState<string | null>(null);
-    const { dadosFormulario, setDadosFormulario } = useAuth();
+    const { dadosFormulario, setDadosFormulario, selectedMulta } = useAuth(RecursoContext);
     const router = useRouter();
 
     const isFormularioIncompleto =
@@ -47,8 +48,8 @@ const Part2 = () => {
                     <h1 className="font-bold text-xl">Responda as perguntas abaixo</h1>
                 </div>
                 <div className="bg-cinza px-[25px] py-2 rounded-md my-4">
-                    <h1 className="font-bold my-2 text-xl">{dadosFormulario.descricao}</h1>
-                    <p className="text-gray-500 font-semibold text-sm">Infração {dadosFormulario.tipoMulta} / {dadosFormulario.tipoDefesa}</p>
+                    <h1 className="font-bold my-2 text-xl">{selectedMulta?.descricao}</h1>
+                    <p className="text-gray-500 font-semibold text-sm">Infração {selectedMulta?.tipo_multa} / {dadosFormulario.tipoDefesa}</p>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="flex border-cinza border-solid border-1 rounded-md px-2 py-1 shadow-sm">

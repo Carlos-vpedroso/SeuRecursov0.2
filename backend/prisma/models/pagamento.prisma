@@ -1,0 +1,46 @@
+model Pagamento {
+    id String @id @default(uuid())
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    multaId String
+    multa   Multa  @relation(fields: [multaId], references: [id])
+
+    valor Decimal @db.Decimal(10, 2)
+
+    metodo PaymentMethod
+    status PaymentStatus @default(PENDING)
+
+    gateway   PaymentGateway
+    gatewayId String?        @unique // ID do pagamento no gateway (InfinitePay / Sicoob)
+
+    qrCode       String? // PIX copia e cola
+    qrCodeImage  String? // Base64 ou URL
+    checkout_url String? //URL gerado pelo checkout da Infinite_Pay
+
+    metadata String? // 🔐 JSON criptografado
+
+    paidAt DateTime?
+
+    recurso   Recurso?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum PaymentMethod {
+    PIX
+    CREDIT_CARD
+}
+
+enum PaymentStatus {
+    PENDING
+    PAID
+    FAILED
+    EXPIRED
+}
+
+enum PaymentGateway {
+    SICOOB
+    INFINITEPAY
+}

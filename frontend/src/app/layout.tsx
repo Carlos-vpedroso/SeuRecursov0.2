@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import AuthProvider from "@/context";
 import Header from "@/components/Header";
 import { Toaster } from 'sonner';
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { UserProvider } from "@/context/UserContext";
+import { RecursoProvider } from "@/context/RecursoContext";
 
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: "Seu Recurso",
@@ -19,12 +23,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={cn("font-sans", geist.variable)}>
       <body className="bg-white text-black">
-        <AuthProvider>
-          <Header />
-          {children}
-        </AuthProvider>
+        <UserProvider>
+          <RecursoProvider>
+            <Header />
+            {children}
+          </RecursoProvider>
+        </UserProvider>
         <Toaster richColors position="top-center" />
       </body>
     </html>

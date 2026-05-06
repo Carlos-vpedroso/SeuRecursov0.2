@@ -1,13 +1,45 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "API do site SeuRecurso.com",
+  "main": "server.js",
+  "scripts": {
+    "dev": "ts-node server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "postinstall": "prisma generate",
+    "worker": "ts-node-dev src/workers/payment.worker.ts"
+  },
+  "keywords": [],
+  "author": "Carlos Pedroso",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.8.0",
+    "axios": "^1.15.0",
     "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.14.1",
-    "nodemon": "^3.1.10",
-    "sequelize": "^6.37.7",
-    "uuid": "^11.1.0"
+    "bullmq": "^5.74.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1",
+    "jsonwebtoken": "^9.0.3",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.3",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.5.2",
+    "@types/qrcode": "^1.5.6",
+    "morgan": "^1.10.1",
+    "prisma": "^7.8.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.2"
   }
 }

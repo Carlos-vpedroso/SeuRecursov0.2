@@ -1,4 +1,4 @@
-import { Facebook, Instagram } from 'lucide-react'
+import { FaFacebook, FaInstagram } from 'react-icons/fa'
 import logo from '../../public/LogoSeuRecurso2.jpg'
 import Image from "next/image"
 
@@ -31,8 +31,8 @@ const Footer = () => {
                 <p className='text-sm underline cursor-pointer'>Política de Privacidade</p>
                 <h3 className='text-white font-bold'>Redes Sociais</h3>
                 <ul className='flex gap-4'>
-                    <li><Facebook className='text-white w-8 h-8 mt-2' /></li>
-                    <li><Instagram className='text-white w-8 h-8 mt-2' /></li>
+                    <li><FaFacebook className='text-white w-8 h-8 mt-2' /></li>
+                    <li><FaInstagram className='text-white w-8 h-8 mt-2' /></li>
                 </ul>
             </div>
         </footer>

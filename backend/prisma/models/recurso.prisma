@@ -1,0 +1,23 @@
+model Recurso {
+    id String @id @default(uuid())
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    multaId String
+    multa   Multa  @relation(fields: [multaId], references: [id])
+
+    paymentId String    @unique
+    payment   Pagamento @relation(fields: [paymentId], references: [id])
+
+    // 📌 Dados NÃO sensíveis (ou menos críticos)
+    nome         String
+    // 📌 Dados do veículo (moderado)
+    autoInfracao String
+
+    // 🔐 Dados sensíveis criptografados ( CPF, RG, TELEFONE, ENDEREÇO COMPLETO )
+    sensitiveData String // JSON criptografado
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
