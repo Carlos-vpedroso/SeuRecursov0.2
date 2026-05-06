@@ -9,7 +9,12 @@ let io: Server;
 export async function initSocket(server: any) {
     io = new Server(server, {
         cors: {
-            origin: ["http://localhost:3000", "https://seurecurso.com"]
+            origin: [
+                "http://localhost:3000",
+                "https://www.seurecurso.com",
+            ],
+            methods: ["GET", "POST"],
+            credentials: true,
         },
     });
 

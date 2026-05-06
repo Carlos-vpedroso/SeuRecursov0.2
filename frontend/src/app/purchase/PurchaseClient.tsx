@@ -81,6 +81,8 @@ function Purchase() {
         if (!pagamentoId) return;
 
         const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+            transports: ["websocket"],
+            withCredentials: true,
             auth: {
                 token: accessToken,
             },
