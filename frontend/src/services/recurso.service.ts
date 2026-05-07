@@ -21,7 +21,7 @@ export class RecursoService {
             const token = this.getToken();
 
             const response = await fetch(
-                `${this.baseUrl}/recursos/${recursoId}`,
+                `${this.baseUrl}/recursos/make-pdf/${recursoId}`,
                 {
                     method: "GET",
                     headers: {
