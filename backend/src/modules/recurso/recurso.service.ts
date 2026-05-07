@@ -37,12 +37,9 @@ export class RecursoService {
             return null;
         }
 
-        const decrypted = decrypt(recurso.sensitiveData);
+        const decrypted: MetadataInput = decrypt(recurso.sensitiveData);
 
-        const parsedSensitiveData: MetadataInput =
-            JSON.parse(decrypted);
-
-        return parsedSensitiveData
+        return decrypted
 
     }
 

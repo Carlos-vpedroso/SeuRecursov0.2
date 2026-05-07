@@ -110,7 +110,7 @@ export default function MultaPage() {
                   transition duration-700 ease-in-out
                 "
               >
-                <h2 className="border-solid border-b-1 border-gray-200 font-bold text-center pb-2">Defesa prévia ou Defesa da Autuação</h2>
+                <h2 className="border-solid border-b border-gray-200 font-bold text-center pb-2">Defesa prévia ou Defesa da Autuação</h2>
                 <p className="text-sm text-gray-500 text-center font-semibold pt-2">Verifique na multa ou consulte no site do Detran</p>
               </label>
             </div>
@@ -131,7 +131,7 @@ export default function MultaPage() {
                   transition duration-700 ease-in-out
                 "
               >
-                <h2 className="border-solid border-b-1 border-gray-200 font-bold text-center pb-2">Recurso Jari</h2>
+                <h2 className="border-solid border-b border-gray-200 font-bold text-center pb-2">Recurso Jari</h2>
                 <p className="text-sm text-gray-500 text-center font-semibold pt-2">Verifique na multa ou consulte no site do Detran</p>
               </label>
             </div>
@@ -152,7 +152,7 @@ export default function MultaPage() {
                 "
                 htmlFor='instancia3'
               >
-                <h2 className="border-solid border-b-1 border-gray-200 font-bold text-center pb-2">Cetran</h2>
+                <h2 className="border-solid border-b border-gray-200 font-bold text-center pb-2">Cetran</h2>
                 <p className="text-sm text-gray-500 text-center font-semibold pt-2">Somente para recursos negados pela JARI</p>
               </label>
             </div>

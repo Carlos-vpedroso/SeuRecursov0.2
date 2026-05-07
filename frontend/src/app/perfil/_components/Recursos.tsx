@@ -50,30 +50,14 @@ const Recursos = ({ userId }: Props) => {
         recurso: RecursoResponseWithoutMetaData
     ) => {
         try {
-            const response = await recursoService.makePDF(
-                recurso.id
-            );
+            const response = await recursoService.makePDF(recurso.id);
 
-            if (!response.success || !response.data) {
-                console.error(
-                    response.error || "Erro ao carregar dados do PDF"
-                );
-
-                return;
-            }
-
-            const {
-                metadata: {
-                    dadosFormulario,
-                    dadosUsuario,
-                    endereco,
-                },
-            } = response.data;
+            const metadata = response.data;
 
             if (
-                !dadosFormulario ||
-                !dadosUsuario ||
-                !endereco
+                !metadata?.dadosFormulario ||
+                !metadata?.dadosUsuario ||
+                !metadata?.endereco
             ) {
                 console.error(
                     "Dados obrigatórios do PDF não encontrados"
@@ -82,18 +66,11 @@ const Recursos = ({ userId }: Props) => {
                 return;
             }
 
-            console.log("Gerando PDF com os dados:");
-            console.log({
-                dadosFormulario,
-                dadosUsuario,
-                endereco,
-                multa: recurso.multa,
-            });
 
             await GerarPDF({
-                dadosRecurso: dadosFormulario,
-                dadosUsuario,
-                endereco,
+                dadosRecurso: metadata.dadosFormulario,
+                dadosUsuario: metadata.dadosUsuario,
+                endereco: metadata.endereco,
                 selectedMulta: recurso.multa,
             });
 

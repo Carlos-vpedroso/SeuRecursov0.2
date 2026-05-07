@@ -67,9 +67,7 @@ export interface RecursoResponseWithoutMetaData {
 }
 
 export interface RecursoResponseWithMetaData {
-    metadata: {
-        dadosFormulario: DadosFormulario,
-        dadosUsuario: DadosUsuario,
-        endereco: Address
-    }
+    dadosFormulario: DadosFormulario,
+    dadosUsuario: DadosUsuario,
+    endereco: Address
 }
