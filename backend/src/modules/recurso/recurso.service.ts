@@ -1,13 +1,51 @@
 import { Recurso } from "../../../generated/prisma/client";
 import prisma from "../../config/prisma";
+import { MetadataInput } from "../../types/metaDataInput";
+import { decrypt } from "../../utils/criptografia";
+
+type RecursoComSensitiveData = {
+    nome: string;
+    autoInfracao: string;
+    createdAt: Date;
+    sensitiveData: MetadataInput;
+};
+
 
 export class RecursoService {
     // Buscar por ID
-    async findById(id: string): Promise<Recurso | null> {
+    async findById(id: string, userId: string): Promise<Recurso | null> {
         return prisma.recurso.findUnique({
-            where: { id },
+            where: { id, userId },
         });
     }
+
+    async findByIdWithSensitiveData(
+        id: string,
+        userId: string
+    ): Promise<MetadataInput | null> {
+        const recurso = await prisma.recurso.findFirst({
+            where: {
+                id,
+                userId,
+            },
+            select: {
+                sensitiveData: true,
+            }
+        });
+
+        if (!recurso) {
+            return null;
+        }
+
+        const decrypted = decrypt(recurso.sensitiveData);
+
+        const parsedSensitiveData: MetadataInput =
+            JSON.parse(decrypted);
+
+        return parsedSensitiveData
+
+    }
+
 
     async create(data: {
         userId: string,

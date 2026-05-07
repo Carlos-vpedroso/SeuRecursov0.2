@@ -82,13 +82,14 @@ function Purchase() {
 
         const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
             transports: ["websocket"],
-            withCredentials: true,
-            auth: {
-                token: accessToken,
-            },
+            auth: { token: accessToken },
         });
 
-        socket.emit("join_payment", pagamentoId);
+        socket.on("connect", () => {
+            console.log("🔌 conectado");
+
+            socket.emit("join_payment", pagamentoId);
+        });
 
         socket.on("payment_confirmed", (data) => {
             console.log("✅ Pagamento confirmado:", data);

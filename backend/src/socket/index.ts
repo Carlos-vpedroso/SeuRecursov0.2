@@ -77,12 +77,14 @@ export async function initSocket(server: any) {
         console.error("🔴 Redis erro:", err);
     });
 
+    subscriber.subscribe("payment_confirmed");
+
     subscriber.on("message", (channel, message) => {
         if (channel === "payment_confirmed") {
             const data = JSON.parse(message);
 
-            if (!data.pagamentoId || isNaN(Number(data.pagamentoId))) {
-                return console.error("🔴 ID do pagamento inválido")
+            if (!data.pagamentoId) {
+                return console.error("🔴 ID do pagamento inválido");
             }
 
             console.log("📩 Evento recebido do worker:", data);

@@ -44,7 +44,7 @@ export class PagamentoController {
         } catch (error) {
             console.error(error);
             return res.status(500).json({
-                error: "Erro ao buscar multas",
+                error: "Erro ao buscar Pagamentos",
             });
         }
     }

@@ -55,6 +55,8 @@ async function gerarRecurso(pagamentoId: string) {
             "payment_confirmed",
             JSON.stringify({ pagamentoId })
         );
+        
+        console.log("📤 Publicando evento:", pagamentoId);
 
     } catch (error) {
         console.error("❌ Erro ao gerar recurso:", error);

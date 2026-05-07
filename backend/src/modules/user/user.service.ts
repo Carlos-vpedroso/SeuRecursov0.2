@@ -36,6 +36,7 @@ export class UserService {
         createdAt: "desc",
       },
       select: {
+        id: true,
         nome: true,
         autoInfracao: true,
         multa: true,

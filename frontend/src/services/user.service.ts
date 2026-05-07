@@ -1,4 +1,4 @@
-import { DadosUser, RecursoResponse } from "@/types";
+import { DadosUser, RecursoResponseWithoutMetaData } from "@/types";
 import Cookies from "js-cookie"
 
 export class UserService {
@@ -71,7 +71,7 @@ export class UserService {
 
     async getAllRecursos(userId: string): Promise<{
         success: boolean;
-        data?: RecursoResponse[];
+        data?: RecursoResponseWithoutMetaData[];
         error?: string;
     }> {
         try {

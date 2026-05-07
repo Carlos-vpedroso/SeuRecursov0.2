@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { userController } from "./user.controller";
 import userMiddleware from "../../middlewares/userMiddleware";
+import adminMiddleware from "../../middlewares/adminMiddleware";
 
 const userRouter = Router();
 
-userRouter.get("/all", userController.get);
+userRouter.get("/all", adminMiddleware, userController.get);
 
 userRouter.get("/:id/all-recursos", userMiddleware, userController.getAllRecursos)
 

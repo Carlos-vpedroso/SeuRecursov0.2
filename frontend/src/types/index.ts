@@ -1,17 +1,5 @@
 import { UUID } from "node:crypto";
 
-export interface AuthContextType {
-    user: string | null;
-    signed: boolean;
-    SignIn: (email: string, password: string) => Promise<void>;
-    SignOut: () => void;
-    dadosFormulario: DadosFormulario;
-    setDadosFormulario: React.Dispatch<React.SetStateAction<DadosFormulario>>;
-    multas: Multa[];
-    loading: boolean;
-    erro: string | null;
-}
-
 export interface DadosFormulario {
     tipoDefesa: string;
     fato: string;
@@ -68,11 +56,20 @@ export interface DadosUser {
 
 export type Providers = "LOCAL" | "GOOGLE"
 
-export interface RecursoResponse {
+export interface RecursoResponseWithoutMetaData {
+    id: string,
     nome: string;
     autoInfracao: string;
     multa: Multa;
     payment?: {
         paidAt: string | null; // vem como string no JSON
+    }
+}
+
+export interface RecursoResponseWithMetaData {
+    metadata: {
+        dadosFormulario: DadosFormulario,
+        dadosUsuario: DadosUsuario,
+        endereco: Address
     }
 }
