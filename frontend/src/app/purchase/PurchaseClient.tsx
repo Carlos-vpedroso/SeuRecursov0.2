@@ -97,7 +97,7 @@ function Purchase() {
             setOpenPixDialog(false);
 
             // 🔥 redireciona
-            router.push("/perfil");
+            router.push("/perfil?page=recursos");
         });
 
         return () => {
