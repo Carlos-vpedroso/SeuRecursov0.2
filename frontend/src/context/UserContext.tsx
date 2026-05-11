@@ -74,7 +74,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
             // salva no cookie
             Cookies.set("token", token, { expires: 7 });
-            
+
 
             return {
                 success: true,
@@ -94,8 +94,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     }
 
     function SignOut() {
+        // limpa estados
         setUser(null)
         setAccessToken(null)
+        // remove cookie
+        Cookies.remove("token");
+
+        // redireciona
+        window.location.href = "/login";
     }
 
     return (
