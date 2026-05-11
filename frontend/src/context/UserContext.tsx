@@ -74,6 +74,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
             // salva no cookie
             Cookies.set("token", token, { expires: 7 });
+            
 
             return {
                 success: true,

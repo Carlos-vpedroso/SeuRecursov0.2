@@ -34,9 +34,9 @@ const Login = () => {
 
   const onSubmit = async (values: LoginForm) => {
     const result = await SignIn(values.email, values.password);
-  
+
     if (result.success) {
-      router.push("/"); // redireciona para home
+      window.location.href = "/"; // redireciona para home
     } else {
       toast.error(result.message); // ou mostrar toast/erro
     }
