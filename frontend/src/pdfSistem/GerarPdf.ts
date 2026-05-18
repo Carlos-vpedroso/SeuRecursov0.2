@@ -13,6 +13,16 @@ type GerarPdfProps = {
     selectedMulta: any;
 };
 
+function formatarNome(nome: string): string {
+    return nome
+        .toLowerCase()
+        .split(' ')
+        .map(palavra =>
+            palavra.charAt(0).toUpperCase() + palavra.slice(1)
+        )
+        .join(' ');
+}
+
 const GerarPdf = async ({
     dadosRecurso,
     dadosUsuario,
@@ -74,9 +84,9 @@ const GerarPdf = async ({
                     },
 
                     { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
                         { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
@@ -389,7 +399,7 @@ const GerarPdf = async ({
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${formatarNome(dadosUsuario.nome)}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -405,7 +415,7 @@ const GerarPdf = async ({
                 { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                 { text: ['Recorrente:', { text: ` ${dadosUsuario.solicitante}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                 {
-                    text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
+                    text: [{ text: `${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' },
                         ', brasileiro, portador do CPF ',
                     { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                         ' do RG ',
@@ -684,7 +694,7 @@ const GerarPdf = async ({
 
                 { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
+                { text: `${formatarNome(dadosUsuario.nome)}`, style: 'paragrafosVarCentral' },
 
                 { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -699,9 +709,9 @@ const GerarPdf = async ({
                     },
 
                     { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
                         { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
@@ -986,7 +996,7 @@ const GerarPdf = async ({
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${formatarNome(dadosUsuario.nome)}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -1000,9 +1010,9 @@ const GerarPdf = async ({
                     },
 
                     { text: ['Auto de Infração', { text: ` ${dadosUsuario.autoInfracao}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
-                    { text: ['Recorrente:', { text: ` ${dadosUsuario.nome}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
+                    { text: ['Recorrente:', { text: ` ${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' }], style: 'paragrafos' },
                     {
-                        text: [{ text: `${dadosUsuario.nome}`, style: 'dadosVariaveis' },
+                        text: [{ text: `${formatarNome(dadosUsuario.nome)}`, style: 'dadosVariaveis' },
                             ', brasileiro, portador do CPF ',
                         { text: `${dadosUsuario.cpf}`, style: 'dadosVariaveis' },
                             ' do RG ',
@@ -1253,7 +1263,7 @@ const GerarPdf = async ({
 
                     { text: '_____________________________________', style: 'paragrafosCentral2' },
 
-                    { text: `${dadosUsuario.nome}`, style: 'paragrafosVarCentral' },
+                    { text: `${formatarNome(dadosUsuario.nome)}`, style: 'paragrafosVarCentral' },
 
                     { text: 'Recorrente', style: 'paragrafosCentral' }
 
@@ -1358,7 +1368,7 @@ const GerarPdf = async ({
         footer: Rodape
     };
 
-    pdfMake.createPdf(docDefinitions).download(`Recurso ${dadosUsuario.nome}-${dadosUsuario.autoInfracao}`);
+    pdfMake.createPdf(docDefinitions).download(`Recurso ${formatarNome(dadosUsuario.nome)}-${dadosUsuario.autoInfracao}`);
     pdfMake.createPdf(docDefinitions).open();
 }
 

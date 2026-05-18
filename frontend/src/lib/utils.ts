@@ -18,7 +18,7 @@ export function validarCPF(cpf: string): boolean {
 }
 
 export function validarRG(rg: string): boolean {
-  const regex = /^\d{2}\.\d{3}\.\d{3}-\d{1}$/;
+  const regex = /^\d{2}\.\d{3}\.\d{3}(-\d{1})?$/;
   return regex.test(rg);
 }
 

@@ -60,10 +60,18 @@ export function maskCPF(value: string) {
   }
 
   export function maskRG(value: string) {
-    return value
-      .replace(/\D/g, "") // remove tudo que não é número
+    const numbers = value.replace(/\D/g, "").slice(0, 9);
+  
+    if (numbers.length <= 8) {
+      // RG antigo: xx.xxx.xxx
+      return numbers
+        .replace(/(\d{2})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2");
+    }
+  
+    // RG novo: xx.xxx.xxx-x
+    return numbers
       .replace(/(\d{2})(\d)/, "$1.$2")
       .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1})$/, "$1-$2")
-      .slice(0, 12);
+      .replace(/(\d{3})(\d{1})$/, "$1-$2");
   }

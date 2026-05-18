@@ -21,8 +21,13 @@ const Part2 = () => {
         dadosFormulario.notificado === '' ||
         dadosFormulario.tempoNotificacao === '' ||
         dadosFormulario.agente === '' ||
-        dadosFormulario.acessoAuto === '' ||
-        dadosFormulario.patio === '';
+        (
+            dadosFormulario.agente === "SIM" &&
+            (
+                dadosFormulario.acessoAuto === '' ||
+                dadosFormulario.patio === ''
+            )
+        );
 
     function handleContinuar() {
         if (dadosFormulario.fato === 'SIM' && dadosFormulario.fatoComentario.trim() === '') {
@@ -248,114 +253,118 @@ const Part2 = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex border-cinza border-solid border-1 rounded-md px-2 py-1 shadow-sm">
-                        <div >
-                            <h1 className="px-3 py-1 bg-azul rounded-md text-white font-bold text-xl mr-2">5</h1>
-                        </div>
-                        <div className="border-l-2 border-cinza px-2">
-                            <h1 className="text-xl font-bold">
-                                {`Você teve acesso ao auto de infração (papel da infração) no momento da abordagem?`}
-                            </h1>
-                            <div className="flex items-center">
-                                <input
-                                    className="mr-2"
-                                    type="radio"
-                                    id='nao5'
-                                    name='acessoAuto'
-                                    value='NÃO'
-                                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                                        const value = e.currentTarget.value;
-                                        setDadosFormulario(prev => ({
-                                            ...prev,
-                                            acessoAuto: value,
-                                        }));
-                                    }}
-                                />
-                                <label htmlFor="nao5"><p>Não</p></label>
+                    {dadosFormulario.agente === "SIM" && (
+                        <>
+                            <div className="flex border-cinza border-solid border-1 rounded-md px-2 py-1 shadow-sm">
+                                <div >
+                                    <h1 className="px-3 py-1 bg-azul rounded-md text-white font-bold text-xl mr-2">5</h1>
+                                </div>
+                                <div className="border-l-2 border-cinza px-2">
+                                    <h1 className="text-xl font-bold">
+                                        {`Você teve acesso ao auto de infração (papel da infração) no momento da abordagem?`}
+                                    </h1>
+                                    <div className="flex items-center">
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            id='nao5'
+                                            name='acessoAuto'
+                                            value='NÃO'
+                                            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                                                const value = e.currentTarget.value;
+                                                setDadosFormulario(prev => ({
+                                                    ...prev,
+                                                    acessoAuto: value,
+                                                }));
+                                            }}
+                                        />
+                                        <label htmlFor="nao5"><p>Não</p></label>
 
+                                    </div>
+                                    <div className="flex items-center">
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            id='sim5'
+                                            name='acessoAuto'
+                                            value='SIM'
+                                            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                                                const value = e.currentTarget.value;
+                                                setDadosFormulario(prev => ({
+                                                    ...prev,
+                                                    acessoAuto: value,
+                                                }));
+                                            }}
+                                        />
+                                        <label htmlFor="sim5"><p>Sim</p></label>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center">
-                                <input
-                                    className="mr-2"
-                                    type="radio"
-                                    id='sim5'
-                                    name='acessoAuto'
-                                    value='SIM'
-                                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                                        const value = e.currentTarget.value;
-                                        setDadosFormulario(prev => ({
-                                            ...prev,
-                                            acessoAuto: value,
-                                        }));
-                                    }}
-                                />
-                                <label htmlFor="sim5"><p>Sim</p></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex border-cinza border-solid border-1 rounded-md px-2 py-1 shadow-sm">
-                        <div >
-                            <h1 className="px-3 py-1 bg-azul rounded-md text-white font-bold text-xl mr-2">6</h1>
-                        </div>
-                        <div className="border-l-2 border-cinza px-2">
-                            <h1 className="text-xl font-bold">Seu veículo foi removido ao pátio ou foi liberado?</h1>
-                            <div className="flex items-center">
-                                <input
-                                    className="mr-2"
-                                    type="radio"
-                                    id='nao6'
-                                    name='patio'
-                                    value='REMOVIDO'
-                                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                                        const value = e.currentTarget.value;
-                                        setDadosFormulario(prev => ({
-                                            ...prev,
-                                            patio: value,
-                                            patioComentario: ''
-                                        }));
-                                    }}
-                                />
-                                <label htmlFor="nao6"><p>Removido</p></label>
+                            <div className="flex border-cinza border-solid border-1 rounded-md px-2 py-1 shadow-sm">
+                                <div >
+                                    <h1 className="px-3 py-1 bg-azul rounded-md text-white font-bold text-xl mr-2">6</h1>
+                                </div>
+                                <div className="border-l-2 border-cinza px-2">
+                                    <h1 className="text-xl font-bold">Seu veículo foi removido ao pátio ou foi liberado?</h1>
+                                    <div className="flex items-center">
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            id='nao6'
+                                            name='patio'
+                                            value='REMOVIDO'
+                                            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                                                const value = e.currentTarget.value;
+                                                setDadosFormulario(prev => ({
+                                                    ...prev,
+                                                    patio: value,
+                                                    patioComentario: ''
+                                                }));
+                                            }}
+                                        />
+                                        <label htmlFor="nao6"><p>Removido</p></label>
 
-                            </div>
-                            <div className="flex items-center">
-                                <input
-                                    className="mr-2"
-                                    type="radio"
-                                    id='sim6'
-                                    name='patio'
-                                    value='LIBERADO'
-                                    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                                        const value = e.currentTarget.value;
-                                        setDadosFormulario(prev => ({
-                                            ...prev,
-                                            patio: value,
-                                        }));
-                                    }}
-                                />
-                                <label htmlFor="sim6"><p>Liberado</p></label>
-                            </div>
-                            {dadosFormulario.patio === 'LIBERADO' && (
-                                <div>
-                                    <Textarea
-                                        placeholder="Apenas cite o nome para quem foi liberado o veículo."
-                                        id="patioComentario"
-                                        onChange={(e) => {
-                                            const value = e.currentTarget.value;
-                                            setDadosFormulario(prev => ({
-                                                ...prev,
-                                                patioComentario: value
-                                            }));
-                                        }}
-                                        className={`
+                                    </div>
+                                    <div className="flex items-center">
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            id='sim6'
+                                            name='patio'
+                                            value='LIBERADO'
+                                            onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                                                const value = e.currentTarget.value;
+                                                setDadosFormulario(prev => ({
+                                                    ...prev,
+                                                    patio: value,
+                                                }));
+                                            }}
+                                        />
+                                        <label htmlFor="sim6"><p>Liberado</p></label>
+                                    </div>
+                                    {dadosFormulario.patio === 'LIBERADO' && (
+                                        <div>
+                                            <Textarea
+                                                placeholder="Apenas cite o nome para quem foi liberado o veículo."
+                                                id="patioComentario"
+                                                onChange={(e) => {
+                                                    const value = e.currentTarget.value;
+                                                    setDadosFormulario(prev => ({
+                                                        ...prev,
+                                                        patioComentario: value
+                                                    }));
+                                                }}
+                                                className={`
                                             mt-2 w-full rounded-md border 
                                             ${errorPatio?.includes('Preencha o nome para quem foi liberado o veículo.') ? 'border-red-500' : 'border-gray-300'}
                                         `}
-                                    />
+                                            />
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    </div>
+                            </div>
+                        </>
+                    )}
 
 
                     <div className="flex justify-between px-4 py-4 items-center">

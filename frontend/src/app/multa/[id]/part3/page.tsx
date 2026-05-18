@@ -340,8 +340,8 @@ const Part3 = () => {
                             id="auto"
                             name="auto"
                             placeholder="Auto de Infração"
-                            onChange={(e) => handleChangeUsuario("autoInfracao", e.target.value)}
-                            className="w-full"
+                            onChange={(e) => handleChangeUsuario("autoInfracao", e.target.value.toUpperCase())}
+                            className="w-full uppercase"
                             required
                         />
                     </div>
@@ -352,8 +352,8 @@ const Part3 = () => {
                             id="placa"
                             name="placa"
                             placeholder="Placa do Veículo"
-                            onChange={(e) => handleChangeUsuario("placaVeiculo", e.target.value)}
-                            className="w-full"
+                            onChange={(e) => handleChangeUsuario("placaVeiculo", e.target.value.toUpperCase())}
+                            className="w-full uppercase"
                             required
                         />
                     </div>
