@@ -1,75 +1,65 @@
-import { NextPage } from 'next'
-import { clsx } from 'clsx'
-import Link from 'next/link'
-import { formatCurrency } from '@/lib/utils'
-import { Multa } from '@/types';
-import { useRouter } from 'next/navigation';
+import { NextPage } from "next";
+import { formatCurrency } from "@/lib/utils";
+import { Multa } from "@/types";
+import { useRouter } from "next/navigation";
+import { Separator } from "./ui/separator";
+import { ScrollArea } from "./ui/scroll-area";
+import { Badge } from "./ui/badge";
 
 interface Props {
-    multa: Multa;
-    setStateSelectedMulta: React.Dispatch<React.SetStateAction<Multa | null>>;
+  multa: Multa;
+  setStateSelectedMulta: React.Dispatch<React.SetStateAction<Multa | null>>;
 }
 
-const Cardmultas: NextPage<Props> = ({ multa,
-    setStateSelectedMulta }) => {
-    const router = useRouter()
+const Cardmultas: NextPage<Props> = ({ multa, setStateSelectedMulta }) => {
+  const router = useRouter();
 
-    const tipoMultaMap = {
-        LEVE: {
-            label: "Leve",
-            color: "text-green-500",
-        },
-        MEDIA: {
-            label: "Média",
-            color: "text-yellow-500",
-        },
-        GRAVE: {
-            label: "Grave",
-            color: "text-orange-500",
-        },
-        GRAVISSIMA: {
-            label: "Gravíssima",
-            color: "text-red-500",
-        },
-    };
-
-    const tipo = tipoMultaMap[multa.tipo_multa];
-
-    const valorMulta = formatCurrency(multa.valor_multa)
-
-    const handleClick = () => {
-        try {
-            setStateSelectedMulta(multa);
-            router.push(`/multa/${multa.id}`)
-        } catch (error) {
-
-        }
+  const handleClick = () => {
+    try {
+      setStateSelectedMulta(multa);
+      router.push(`/formulario`);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-
-    return (
-        <div
-            className='relative min-h-35 md:min-h-50 shadow-md border border-solid border-gray-200 rounded-md cursor-pointer hover:border-gray-500 hover:shadow-xl transition duration-300'
-            onClick={handleClick}
-        >
-            <div className='flex justify-between mx-4 my-2'>
-                <p className='text-gray-400'>{multa.artigo_multa}</p>
-                <p className='text-gray-400'>{multa.codigo_multa}</p>
-            </div>
-            <h3 className='mx-2 text-sm'>{multa.descricao}</h3>
-            <div
-                className={clsx(
-                    "absolute bottom-0 justify-between w-full",
-                    tipo?.color
-                )}
-            >
-                <div className='flex w-full justify-between px-4 pb-1'>
-                    <p>{tipo?.label}</p>
-                    <p>{valorMulta}</p>
-                </div>
-            </div>
+  return (
+    <div
+      className="bg-card cursor-pointer rounded-2xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300 select-none hover:scale-[1.02] active:scale-[0.98]"
+      onClick={handleClick}
+    >
+      <ScrollArea className="h-24">
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="font-title text-texto2 my-auto text-lg">
+            {multa.descricao}
+          </h1>
         </div>
-    )
-}
+      </ScrollArea>
+      <Separator className="my-4" />
 
-export default Cardmultas
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-4 lg:justify-between">
+        <div className="flex flex-col items-center gap-2">
+          <Badge className="rounded-xl border border-red-500/20 bg-red-500/10 p-2 text-sm font-medium text-red-400">
+            <span className="mr-2 font-semibold text-red-300">
+              Multa: {formatCurrency(multa.valor_multa)}
+            </span>
+          </Badge>
+
+          <Badge className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-lg font-medium text-emerald-400">
+            <span className="mr-2 font-semibold text-green-700">
+              Recurso: {formatCurrency(multa.valor_recurso)}
+            </span>
+          </Badge>
+        </div>
+
+        <div className="text-texto2/60 flex items-center gap-2">
+          <span>{multa.artigo_multa}</span>
+          <span>-</span>
+          <span>{multa.codigo_multa}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Cardmultas;
