@@ -1,30 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
-
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function proxy(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
 
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
   if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+
+    loginUrl.searchParams.set(
+      "callbackUrl",
+      request.nextUrl.pathname + request.nextUrl.search
+    );
+    return NextResponse.redirect(loginUrl);
   }
 
-  try {
-    const secret = process.env.JWT_TOKEN;
-
-    if (!secret) {
-      throw new Error("JWT_TOKEN não definido");
-    }
-    await jwtVerify(token, new TextEncoder().encode(secret));
-    return NextResponse.next();
-  } catch (err) {
-    console.error("Token inválido:", err);
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/perfil", "/perfil/:path*", "/multa/:path*", "/purchase/:path*"],
+  matcher: [
+    "/perfil/:path*",
+    "/formulario/revisao/:path*",
+  ],
 };

@@ -16,45 +16,46 @@ interface RecursoContextType {
     setEndereco: React.Dispatch<React.SetStateAction<Address>>;
 }
 
-export const RecursoContext = createContext<RecursoContextType>({
-    multas: [],
-    selectedMulta: null,
-    setSelectedMulta: () => undefined,
-    loading: false,
-    dadosFormulario: {
-        tipoDefesa: '',
-        fato: '',
-        fatoComentario: '',
-        notificado: '',
-        tempoNotificacao: '',
-        agente: '',
-        acessoAuto: '',
-        patio: '',
-        patioComentario: ''
-    },
-    setDadosFormulario: () => undefined,
-    dadosUsuario: {
-        nome: "",
-        cpf: "",
-        rg: "",
-        celular: "",
-        ufEmissao: "",
-        autoInfracao: "",
-        placaVeiculo: "",
-        tipoUsuario: "",
-        solicitante: "",
-    },
-    setDadosUsuario: () => undefined,
-    endereco: {
-        cep: "",
-        logradouro: "",
-        numero: "",
-        bairro: "",
-        cidade: "",
-        uf: ""
-    },
-    setEndereco: () => undefined,
-})
+export const RecursoContext = createContext<RecursoContextType | undefined>(undefined)
+// {
+//     multas: [],
+//     selectedMulta: null,
+//     setSelectedMulta: () => undefined,
+//     loading: false,
+//     dadosFormulario: {
+//         tipoDefesa: '',
+//         fato: '',
+//         fatoComentario: '',
+//         notificado: '',
+//         tempoNotificacao: '',
+//         agente: '',
+//         acessoAuto: '',
+//         patio: '',
+//         patioComentario: ''
+//     },
+//     setDadosFormulario: () => undefined,
+//     dadosUsuario: {
+//         nome: "",
+//         cpf: "",
+//         rg: "",
+//         celular: "",
+//         ufEmissao: "",
+//         autoInfracao: "",
+//         placaVeiculo: "",
+//         tipoUsuario: "",
+//         solicitante: "",
+//     },
+//     setDadosUsuario: () => undefined,
+//     endereco: {
+//         cep: "",
+//         logradouro: "",
+//         numero: "",
+//         bairro: "",
+//         cidade: "",
+//         uf: ""
+//     },
+//     setEndereco: () => undefined,
+// }
 
 interface RecursoProviderProps {
     children: ReactNode
@@ -93,7 +94,7 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
         cidade: "",
         uf: ""
     })
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const fetchMultas = async () => {
@@ -118,6 +119,60 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
         fetchMultas();
     }, []);
 
+    useEffect(() => {
+        const loadSavedData = () => {
+            try {
+                const saved = localStorage.getItem("recurso-formulario");
+
+                if (saved) {
+                    const data = JSON.parse(saved);
+
+                    setSelectedMulta(data.selectedMulta ?? null);
+                    setDadosFormulario(data.dadosFormulario ?? {
+                        tipoDefesa: '',
+                        fato: '',
+                        fatoComentario: '',
+                        notificado: '',
+                        tempoNotificacao: '',
+                        agente: '',
+                        acessoAuto: '',
+                        patio: '',
+                        patioComentario: ''
+                    });
+
+                    setDadosUsuario(data.dadosUsuario ?? {
+                        nome: "",
+                        cpf: "",
+                        rg: "",
+                        celular: "",
+                        ufEmissao: "",
+                        autoInfracao: "",
+                        placaVeiculo: "",
+                        tipoUsuario: "",
+                        solicitante: "",
+                    });
+
+                    setEndereco(data.endereco ?? {
+                        cep: "",
+                        logradouro: "",
+                        numero: "",
+                        bairro: "",
+                        cidade: "",
+                        uf: ""
+                    });
+
+
+                }
+            } catch (error) {
+                console.error("Erro ao carregar dados salvos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadSavedData();
+    }, []);
+
 
     return (
         <RecursoContext.Provider
@@ -131,7 +186,7 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
                 setDadosUsuario,
                 endereco,
                 setEndereco,
-                loading
+                loading,
             }}
         >
             {children}

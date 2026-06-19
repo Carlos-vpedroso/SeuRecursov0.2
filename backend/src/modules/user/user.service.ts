@@ -1,4 +1,4 @@
-import { PrismaClient, User, Providers, Recurso } from "../../../generated/prisma/client";
+import { User } from "../../../generated/prisma/client";
 import prisma from "../../config/prisma";
 
 export class UserService {
@@ -6,9 +6,7 @@ export class UserService {
   async create(data: {
     nome: string;
     email: string;
-    password?: string;
-    telefone?: string;
-    provider?: Providers;
+    imageUrl?: string;
   }): Promise<User> {
     return prisma.user.create({
       data: {
@@ -69,9 +67,7 @@ export class UserService {
     data: Partial<{
       nome: string;
       email: string;
-      password: string;
-      telefone: string;
-      provider: Providers;
+      imageUrl: string;
     }>
   ): Promise<User> {
     return prisma.user.update({

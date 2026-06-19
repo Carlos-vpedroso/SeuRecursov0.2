@@ -30,7 +30,7 @@ const cards = [
     subtitle: "Encontre sua infração",
     description:
       "Pesquise sua infração pelo código, artigo ou descrição da multa e encontre rapidamente o motivo da autuação.",
-    src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/Passo1.png",
     icon: Search,
   },
   {
@@ -38,7 +38,7 @@ const cards = [
     subtitle: "Responda poucas perguntas",
     description:
       "Selecione a infração recebida e responda algumas perguntas rápidas para criarmos um recurso completo, técnico e profissional.",
-    src: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/Passo2.png",
     icon: ClipboardList,
   },
   {
@@ -46,7 +46,7 @@ const cards = [
     subtitle: "Preencha seus dados com segurança",
     description:
       "Informe seus dados pessoais com total segurança. Nossa plataforma utiliza criptografia para garantir 100% de proteção das suas informações.",
-    src: "https://images.unsplash.com/photo-1633265486064-086b219458ec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/Passo3.png",
     icon: ShieldCheck,
   },
   {
@@ -54,7 +54,7 @@ const cards = [
     subtitle: "Revise e confirme",
     description:
       "Visualize um resumo completo das informações preenchidas e confirme os dados para a geração final do seu recurso.",
-    src: "https://images.unsplash.com/photo-1637855190680-5cbe1d870b46?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/Passo4.png",
     icon: FileCheck,
   },
   {
@@ -62,7 +62,7 @@ const cards = [
     subtitle: "Pagamento e download imediato",
     description:
       "Realize o pagamento via PIX ou Cartão e acesse imediatamente sua área “Meus Recursos” para baixar seu recurso profissional.",
-    src: "https://images.unsplash.com/photo-1713947506242-8fcae733d158?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    src: "/Passo5.png",
     icon: CreditCard,
   },
 ];
@@ -107,7 +107,7 @@ export default function Multas() {
                       />
 
                       {/* OVERLAY */}
-                      <div className="absolute inset-0 bg-black/80" />
+                      <div className="absolute inset-0 bg-linear-to-b from-black/30 to-black/80" />
 
                       {/* CONTEÚDO */}
                       <div className="text-texto relative z-10 flex h-full w-full flex-col justify-between p-8">

@@ -1,93 +1,141 @@
-"use client"
-
-import { User } from "lucide-react";
+"use client";
+import { LogOut, FileText } from "lucide-react";
+import Header from "@/components/Header";
+import UserStats from "./_components/UserStats";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { signOut } from "next-auth/react";
+import { recursosMock } from "@/data/recursos";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-
-import Dados from "./_components/Dados";
-import Recursos from "./_components/Recursos";
-// import Senha from "./components/Senha";
-// import FAQ from "./components/FAQ";
+import { useEffect, useState, useMemo } from "react";
+import { Recurso } from "@/types";
+import RecursoCard from "./_components/RecursoCard";
+import { formatDate } from "@/lib/utils";
 import { useAuth } from "@/hook/useAuth";
 import { UserContext } from "@/context/UserContext";
 
-const Perfil = () => {
-    const { user } = useAuth(UserContext)
-    if (!user) {
-        return (
-            <div className="flex justify-center items-center h-40">
-                <p className="text-gray-500">Carregando Página...</p>
-            </div>
-        );
-    }
-    const searchParams = useSearchParams();
+export default function ProfilePage() {
+  const [recursos, setRecursos] = useState<Recurso[]>([]);
+  const { user, session, status } = useAuth(UserContext);
 
-    const page = searchParams.get("page") || "dados";
+  const initials = user?.name
+    .split(" ")
+    .slice(0, 2)
+    .map((n: any) => n[0])
+    .join("")
+    .toUpperCase();
 
-    const renderPage = () => {
-        switch (page.toLowerCase()) {
-            case "dados":
-                return <Dados user={user} />;
+  useEffect(() => {
+    // IMPLEMENTAR DADOS DA API POSTERIORMENTE
+    setTimeout(() => {
+      setRecursos(recursosMock);
+    }, 1000);
+  }, []);
 
-            case "recursos":
-                return <Recursos userId={user.id} />;
+  const userStats = useMemo(() => {
+    return {
+      totalRecursos: recursos.length,
 
-            case "senha":
-                return <div />;
+      totalInvestido: recursos
+        .reduce(
+          (acc, recurso) => acc + parseFloat(recurso.multa.valor_recurso),
+          0,
+        )
+        .toFixed(2),
 
-            case "faq":
-                return <div />;
+      totalEconomizado: recursos
+        .reduce(
+          (acc, recurso) =>
+            acc +
+            parseFloat(recurso.multa.valor_multa) -
+            parseFloat(recurso.multa.valor_recurso),
+          0,
+        )
+        .toFixed(2),
 
-            default:
-                return <Dados user={user} />;
-        }
+      ultimaCompra: formatDate(recursosMock[0].payment!.paidAt),
     };
+  }, [recursos]);
 
-    return (
-        <section className="flex w-full justify-center items-center">
-            <div className="w-full xl:w-1/2 grid grid-cols-1 xl:grid-cols-3 min-h-screen">
+  const handleLogout = async () => {
+    await signOut({
+      callbackUrl: "/",
+    });
+  };
 
-                <div className="h-full bg-azul">
+  return (
+    <main className="flex min-h-screen flex-col">
+      <Header visible={true} />
 
-                    <div className="border-b-4 border-white mx-4 my-4">
-                        <User className="text-white w-30 h-30 mx-auto" />
-                        <h1 className="text-center text-white font-semibold my-2">
-                            Usuário
-                        </h1>
-                    </div>
+      <div className="bg-fundo2 grid flex-1 grid-cols-1 lg:grid-cols-4">
+        {/* ── Sidebar esquerda ── */}
+        <aside className="border-fundo col-span-1 flex flex-col items-center justify-around gap-6 border-r p-8">
+          <div className="flex flex-col items-center gap-4">
+            <Avatar className="ring-cor1/40 ring-offset-fundo2 h-24 w-24 ring-2 ring-offset-2">
+              <AvatarImage
+                src={user?.image || ""}
+                alt={user?.name || "Usuário"}
+              />
+              <AvatarFallback className="bg-cor1/20 bg- text-cor1 font-title text-2xl font-bold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
 
-                    <div className="flex flex-col text-center text-white font-semibold space-y-3">
-
-                        <Link href="/">
-                            Home
-                        </Link>
-
-                        <Link href="/perfil?page=dados">
-                            Meus Dados
-                        </Link>
-
-                        <Link href="/perfil?page=recursos">
-                            Meus Recursos
-                        </Link>
-
-                        <Link href="/perfil?page=senha">
-                            Alterar Senha
-                        </Link>
-
-                        <Link href="/perfil?page=faq">
-                            Dúvidas Frequentes
-                        </Link>
-
-                    </div>
-                </div>
-
-                <div className="xl:col-span-2 min-h-screen p-4 w-full">
-                    {renderPage()}
-                </div>
-
+            <div className="text-center">
+              <p className="font-title text-texto2 text-xl font-semibold">
+                {user?.name}
+              </p>
+              <p className="text-texto2/50 mt-1 text-sm">{user?.email}</p>
             </div>
-        </section>
-    );
-};
+          </div>
 
-export default Perfil;
+          <button
+            onClick={handleLogout}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition-all duration-200 hover:bg-red-500/20"
+          >
+            <LogOut className="h-4 w-4" />
+            Sair da conta
+          </button>
+        </aside>
+
+        {/* ── Área principal ── */}
+        <section className="col-span-3 my-auto space-y-8 p-4 lg:p-8">
+          {/* Estatísticas */}
+          <div>
+            <h2 className="font-title text-texto2 mb-6 px-4 text-3xl font-bold">
+              Resumo
+            </h2>
+
+            <UserStats userStats={userStats} />
+          </div>
+
+          <div className="mb-6 flex flex-col items-center justify-between gap-4 px-4 lg:flex-row lg:items-end">
+            <h2 className="font-title text-texto2 text-3xl font-bold">
+              Últimas Transações
+            </h2>
+
+            <Link
+              href="/perfil/meus-recursos"
+              className="bg-cor1 hover:bg-cor1/90 text-texto flex h-10 cursor-pointer items-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all duration-200"
+            >
+              <FileText className="h-4 w-4" />
+              Todos os Recursos
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+            {recursos.slice(0, 3).map((recurso) => (
+              <RecursoCard
+                key={recurso.id}
+                recurso={recurso}
+                onVisualizar={() =>
+                  console.log("visualizar recurso", recurso.id)
+                }
+                onBaixar={() => console.log("baixar recurso", recurso.id)}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
+  );
+}

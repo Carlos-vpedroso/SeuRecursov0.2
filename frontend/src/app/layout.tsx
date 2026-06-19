@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-import { UserProvider } from "@/context/UserContext";
 import { RecursoProvider } from "@/context/RecursoContext";
 import { Inter, Libre_Baskerville } from "next/font/google";
+import { UserProvider } from "@/context/UserContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +38,9 @@ export default function RootLayout({
     >
       <body className="font-text text-texto bg-fundo">
         <UserProvider>
-          <RecursoProvider>{children}</RecursoProvider>
+          <RecursoProvider>
+            {children}
+          </RecursoProvider>
         </UserProvider>
         <Toaster richColors position="top-center" />
       </body>

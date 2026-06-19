@@ -16,6 +16,19 @@ export function formatCurrency(
   }).format(Number(value));
 }
 
+export function formatDate(value: string) {
+  const normalized = value.replace(" ", "T");
+  const date = new Date(normalized);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
 export function validarCPF(cpf: string): boolean {
   const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   return regex.test(cpf);
@@ -31,27 +44,43 @@ export async function buscarCEP(
 ): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const cepLimpo = cep.replace(/\D/g, "");
+
     if (cepLimpo.length !== 8) {
       return {
         success: false,
         error: "CEP inválido",
       };
     }
+
     const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+
     if (!response.ok) {
       return {
         success: false,
-        error: "Erro ao buscar CEP",
+        error: "Erro ao consultar CEP",
       };
     }
+
     const result = await response.json();
+
+    if (result.erro) {
+      return {
+        success: false,
+        error: "CEP não encontrado",
+      };
+    }
+
     return {
       success: true,
       data: result,
     };
   } catch (error) {
-    console.error("Erro no login:", error);
-    throw error;
+    console.error("Erro ao buscar CEP:", error);
+
+    return {
+      success: false,
+      error: "Erro interno ao consultar CEP",
+    };
   }
 }
 

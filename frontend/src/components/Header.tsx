@@ -15,21 +15,14 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header
-      className={`
-        ${position}
-        top-0 left-0 z-50 w-full
-        transition-all duration-500
-        ${visible
+      className={` ${position} top-0 left-0 z-50 w-full transition-all duration-500 ${
+        visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none -translate-y-4 opacity-0"
-        }
-      `}
+      } `}
     >
       <div
-        className={`
-          bg-fundo/80 mx-auto h-20 px-6 backdrop-blur-md
-          ${flex ? "flex items-center justify-between" : ""}
-        `}
+        className={`bg-fundo/80 mx-auto h-20 px-6 backdrop-blur-md ${flex ? "flex items-center justify-between" : ""} `}
       >
         {/* LOGOTIPO */}
         <Link
@@ -40,7 +33,7 @@ export default function Header({
         </Link>
 
         {/* BOTÃO */}
-        <Link href="/area-do-cliente">
+        <Link href="/perfil">
           <motion.button
             initial="initial"
             whileHover="hover"

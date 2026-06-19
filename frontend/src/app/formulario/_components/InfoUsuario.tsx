@@ -65,15 +65,23 @@ export default function InfoUsuario({
 
         const response = await buscarCEP(cepLimpo);
 
-        if (!response.success || !response.data) return;
+        if (!response.success) {
+            setEndereco((prev) => ({
+                ...prev,
+                cidade: "",
+                uf: "",
+            }));
+
+            return;
+        }
 
         setEndereco((prev) => ({
             ...prev,
-            cep: value,
             cidade: response.data.localidade,
             uf: response.data.uf,
         }));
     };
+
     return (
         <Card className="w-full h-full flex flex-col bg-card justify-between">
             <CardHeader>

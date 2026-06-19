@@ -81,12 +81,12 @@ const CardMulta: NextPage<Props> = ({ multa, setStateSelectedMulta }) => {
           </h3>
         </div>
 
-        <div className="flex w-full flex-col justify-between rounded-2xl border border-emerald-500/10 bg-emerald-500/5 p-4">
-          <p className="text-xs font-semibold tracking-wide whitespace-nowrap text-emerald-400 uppercase">
+        <div className="flex w-full flex-col justify-between rounded-2xl border border-emerald-500/10 bg-emerald-500/5 p-4 text-emerald-600">
+          <p className="text-xs font-semibold tracking-wide whitespace-nowrap uppercase">
             Valor do recurso
           </p>
 
-          <h3 className="mt-1 text-4xl font-bold text-emerald-400">
+          <h3 className="mt-1 text-4xl font-bold">
             {formatCurrency(multa.valor_recurso)}
           </h3>
         </div>

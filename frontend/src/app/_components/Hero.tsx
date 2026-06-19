@@ -149,7 +149,7 @@ export default function Hero() {
               </motion.div>
 
               <Link
-                href="/area-do-cliente"
+                href="/perfil"
                 className="flex items-center gap-3 px-2 py-2 text-lg whitespace-nowrap lg:hidden lg:text-xl"
               >
                 <span className="text-texto font-medium">Área do Cliente</span>
@@ -184,36 +184,38 @@ export default function Hero() {
         >
           {/* Área do cliente */}
           {/* BOTÃO */}
-          <motion.button
-            initial="initial"
-            whileHover="hover"
-            className="bg-cor1 text-texto relative flex -skew-x-21 cursor-pointer gap-2 overflow-hidden px-6 py-3 font-semibold uppercase"
-          >
-            {/* Background animado */}
-            <motion.div
-              variants={{
-                initial: {
-                  x: "-100%",
-                  opacity: 0,
-                },
-                hover: {
-                  x: "0%",
-                  opacity: 1,
-                },
-              }}
-              transition={{
-                duration: 0.4,
-                ease: "easeInOut",
-              }}
-              className="bg-fundo absolute inset-0 z-0"
-            />
+          <Link href="/perfil">
+            <motion.button
+              initial="initial"
+              whileHover="hover"
+              className="bg-cor1 text-texto relative flex -skew-x-21 cursor-pointer gap-2 overflow-hidden px-6 py-3 font-semibold uppercase"
+            >
+              {/* Background animado */}
+              <motion.div
+                variants={{
+                  initial: {
+                    x: "-100%",
+                    opacity: 0,
+                  },
+                  hover: {
+                    x: "0%",
+                    opacity: 1,
+                  },
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: "easeInOut",
+                }}
+                className="bg-fundo absolute inset-0 z-0"
+              />
 
-            {/* Texto */}
-            <span className="relative z-10 inline-block skew-x-21">
-              Área do Cliente
-            </span>
-            <LogIn className="skew-x-21" />
-          </motion.button>
+              {/* Texto */}
+              <span className="relative z-10 inline-block skew-x-21">
+                Área do Cliente
+              </span>
+              <LogIn className="skew-x-21" />
+            </motion.button>
+          </Link>
 
           {/* Cards */}
           <div className="flex w-full items-center justify-end">

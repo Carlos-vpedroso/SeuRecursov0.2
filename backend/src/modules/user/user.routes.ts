@@ -9,9 +9,7 @@ userRouter.get("/all", adminMiddleware, userController.get);
 
 userRouter.get("/:id/all-recursos", userMiddleware, userController.getAllRecursos)
 
-userRouter.post("/create", userController.createUser);
-
-userRouter.post("/login", userController.login);
+userRouter.post("/auth/google", userController.authGoogle);
 
 export default {
     path: "/users",

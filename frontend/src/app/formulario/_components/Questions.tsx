@@ -54,7 +54,7 @@ export default function Questions({
             )
         );
     return (
-        <Card className="w-full h-full flex flex-col bg-card justify-between">
+        <Card className="w-full h-full flex flex-col bg-card justify-between select-none">
             <CardHeader>
                 <CardTitle className="font-title text-lg">Perguntas</CardTitle>
             </CardHeader>

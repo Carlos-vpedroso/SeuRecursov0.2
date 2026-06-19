@@ -31,7 +31,7 @@ export function TipoDefesa({
     ];
     const podeAvancar = tipoDefesa !== ""
     return (
-        <Card className="w-full h-full flex flex-col bg-card justify-between">
+        <Card className="w-full h-full flex flex-col bg-card justify-between select-none">
             <CardHeader>
                 <CardTitle className="font-title text-lg">Tipo Defesa</CardTitle>
             </CardHeader>

@@ -1,15 +1,11 @@
 import { RecursoResponseWithMetaData } from "@/types";
-import Cookies from "js-cookie"
 
 export class RecursoService {
     private baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    private getToken() {
-        return Cookies.get("token");
-    }
-
     async makePDF(
-        recursoId: string
+        recursoId: string,
+        token:string
     ): Promise<{
         success: boolean;
         data?: RecursoResponseWithMetaData;
@@ -17,8 +13,6 @@ export class RecursoService {
     }> {
 
         try {
-
-            const token = this.getToken();
 
             const response = await fetch(
                 `${this.baseUrl}/recursos/make-pdf/${recursoId}`,

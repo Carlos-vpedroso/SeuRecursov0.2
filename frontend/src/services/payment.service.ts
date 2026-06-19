@@ -22,12 +22,10 @@ export type CreatePaymentResponse = {
 
 export class PaymentService {
     private baseUrl = process.env.NEXT_PUBLIC_API_URL;
-    private getToken() {
-        return Cookies.get("token");
-    }
 
-    async create(data: CreatePaymentDTO): Promise<CreatePaymentResponse> {
-        const token = this.getToken();
+
+    async create(data: CreatePaymentDTO, token: string): Promise<CreatePaymentResponse> {
+
         const response = await fetch(`${this.baseUrl}/pagamentos/create`, {
             method: "POST",
             headers: {
