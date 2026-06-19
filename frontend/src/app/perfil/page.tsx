@@ -18,20 +18,9 @@ export default function ProfilePage() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
   const { user, userId, accessToken } = useAuth(UserContext);
 
-  const initials = user?.name
-    .split(" ")
-    .slice(0, 2)
-    .map((n: any) => n[0])
-    .join("")
-    .toUpperCase();
-
-  if (!userId || !accessToken) {
-    return (
-      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
-    );
-  }
-
   useEffect(() => {
+    if (!userId || !accessToken) return;
+
     const fetchRecursos = async () => {
       try {
         const response = await userService.getAllRecursos(userId, accessToken);
@@ -70,7 +59,9 @@ export default function ProfilePage() {
         )
         .toFixed(2),
 
-      ultimaCompra: formatDate(recursos[0].payment!.paidAt),
+      ultimaCompra: recursos[0]?.payment?.paidAt
+        ? formatDate(recursos[0].payment.paidAt)
+        : "-",
     };
   }, [recursos]);
 
@@ -79,6 +70,19 @@ export default function ProfilePage() {
       callbackUrl: "/",
     });
   };
+
+  const initials = user?.name
+    .split(" ")
+    .slice(0, 2)
+    .map((n: any) => n[0])
+    .join("")
+    .toUpperCase();
+
+  if (!userId || !accessToken) {
+    return (
+      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col">
