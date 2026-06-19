@@ -3,8 +3,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
@@ -17,12 +15,13 @@ import {
   FileCheck,
   CreditCard,
 } from "lucide-react";
-import { useState } from "react";
-import { multasMock } from "@/data/multas";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hook/useAuth";
 import { RecursoContext } from "@/context/RecursoContext";
 import CardMultas from "@/components/Cardmultas";
 import Link from "next/link";
+import { Multa } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const cards = [
   {
@@ -68,9 +67,21 @@ const cards = [
 ];
 
 export default function Multas() {
-  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { setSelectedMulta } = useAuth(RecursoContext);
+  const { multas, setSelectedMulta, loading } = useAuth(RecursoContext);
+
+  const multasFiltradas = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+
+    return multas.filter((multa) => {
+      return (
+        multa.codigo_multa.toLowerCase().includes(term) ||
+        multa.artigo_multa.toLowerCase().includes(term) ||
+        multa.descricao.toLowerCase().includes(term)
+      );
+    });
+  }, [multas, searchTerm]);
 
   return (
     <section id="multas" className="bg-fundo2 relative min-h-screen">
@@ -144,34 +155,55 @@ export default function Multas() {
         </div>
         {/* INPUT + CARD DAS MULTAS */}
         <div className="relative z-10">
-          <div className="focus-within:ring-cor1 flex w-full items-center overflow-hidden rounded-2xl border shadow-md transition-all duration-300 focus-within:ring-1">
+          <div className="focus-within:ring-cor1 bg-card flex w-full items-center overflow-hidden rounded-2xl border shadow-md transition-all duration-300 focus-within:ring-1">
+            <div className="text-cor1 pointer-events-none ml-4">
+              <Search className="h-5 w-5" />
+            </div>
+
             <input
               type="text"
-              placeholder="Buscar Multa..."
-              className="text-texto2 placeholder:text-texto2/50 bg-card h-14 w-full px-5 outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar multa por descrição, código ou artigo..."
+              className="text-texto2 placeholder:text-texto2/50 h-14 w-full bg-transparent px-4 outline-none"
             />
-
-            <button
-              onClick={() => setLoading((prev) => !prev)}
-              className="bg-cor1 hover:bg-cor1/90 text-texto mr-2 flex h-10 cursor-pointer items-center gap-2 rounded-xl px-4 font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-            >
-              {loading ? (
-                <RefreshCcw className="h-4 w-4 animate-spin" />
-              ) : (
-                <Search className="h-4 w-4" />
-              )}
-              <span className="text-sm">Buscar</span>
-            </button>
           </div>
 
           <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {multasMock.slice(0, 6).map((multa) => (
-              <CardMultas
-                key={multa.id}
-                multa={multa}
-                setStateSelectedMulta={setSelectedMulta}
-              />
-            ))}
+            {loading ? (
+              Array.from({ length: 6 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-64 w-full rounded-2xl bg-gray-300"
+                />
+              ))
+            ) : multasFiltradas.length > 0 ? (
+              multasFiltradas
+                .slice(0, 6)
+                .map((multa) => (
+                  <CardMultas
+                    key={multa.id}
+                    multa={multa}
+                    setStateSelectedMulta={setSelectedMulta}
+                  />
+                ))
+            ) : (
+              <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 lg:col-span-3">
+                <Search className="text-texto2/30 h-16 w-16" />
+
+                <div className="text-center">
+                  <h2 className="text-texto2 text-xl font-semibold">
+                    Nenhuma multa encontrada
+                  </h2>
+
+                  <p className="text-texto2/60 mt-2 max-w-md">
+                    Nenhuma multa corresponde aos filtros aplicados. Tente
+                    ajustar a pesquisa, os valores ou as gravidades
+                    selecionadas.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         {/* BOTÃO DE VER MAIS MULTAS */}

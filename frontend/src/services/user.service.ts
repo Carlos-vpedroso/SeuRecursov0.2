@@ -1,49 +1,50 @@
-import { RecursoResponseWithoutMetaData } from "@/types";
+import { Recurso } from "@/types";
 
 export class UserService {
+  private baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    private baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  async getAllRecursos(
+    userId: string,
+    token: string,
+  ): Promise<{
+    success: boolean;
+    data?: Recurso[];
+    error?: string;
+  }> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/users/${userId}/all-recursos`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        },
+      );
 
-    async getAllRecursos(userId: string, token: string): Promise<{
-        success: boolean;
-        data?: RecursoResponseWithoutMetaData[];
-        error?: string;
-    }> {
-        try {
+      const result = await response.json();
 
-            const response = await fetch(
-                `${this.baseUrl}/users/${userId}/all-recursos`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    cache: "no-store",
-                }
-            );
+      if (!response.ok) {
+        return {
+          success: false,
+          error: result.error || "Erro ao buscar recursos",
+        };
+      }
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                return {
-                    success: false,
-                    error: result.error || "Erro ao buscar recursos",
-                };
-            }
-
-            return {
-                success: true,
-                data: result,
-            };
-        } catch (error) {
-            console.error("Erro ao buscar recursos:", error);
-            return {
-                success: false,
-                error: "Erro inesperado",
-            };
-        }
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      console.error("Erro ao buscar recursos:", error);
+      return {
+        success: false,
+        error: "Erro inesperado",
+      };
     }
+  }
 }
 
 export const userService = new UserService();

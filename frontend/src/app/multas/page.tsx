@@ -5,10 +5,10 @@ import Header from "@/components/Header";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import PriceSlider from "./_components/PriceSlider";
-import { multasMock } from "@/data/multas";
 import CardMulta from "./_components/CardMulta";
 import { RecursoContext } from "@/context/RecursoContext";
 import { useAuth } from "@/hook/useAuth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const severities = [
   {
@@ -42,7 +42,7 @@ const severities = [
 ];
 
 export default function MultasPage() {
-  const { setSelectedMulta } = useAuth(RecursoContext);
+  const { multas, setSelectedMulta, loading } = useAuth(RecursoContext);
 
   const [search, setSearch] = useState("");
   const [multasPriceRange, setMultasPriceRange] = useState<number[]>([0, 0]);
@@ -53,8 +53,8 @@ export default function MultasPage() {
 
   const { minMultasPrice, maxMultasPrice, minRecursosPrice, maxRecursosPrice } =
     useMemo(() => {
-      const multasValues = multasMock.map((m) => Number(m.valor_multa));
-      const recursosValues = multasMock.map((m) => Number(m.valor_recurso));
+      const multasValues = multas.map((m) => Number(m.valor_multa));
+      const recursosValues = multas.map((m) => Number(m.valor_recurso));
 
       return {
         minMultasPrice: Math.min(...multasValues),
@@ -76,7 +76,7 @@ export default function MultasPage() {
   }, [minMultasPrice, maxMultasPrice, minRecursosPrice, maxRecursosPrice]);
 
   const filteredMultas = useMemo(() => {
-    return multasMock.filter((multa) => {
+    return multas.filter((multa) => {
       const multasPrice = Number(multa.valor_multa);
       const recursosPrice = Number(multa.valor_recurso);
 
@@ -196,32 +196,40 @@ export default function MultasPage() {
             </button>
           </div>
 
-          {filteredMultas.length === 0 ? (
-            <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-              <Search className="text-texto2/30 h-16 w-16" />
-
-              <div className="text-center">
-                <h2 className="text-texto2 text-xl font-semibold">
-                  Nenhuma multa encontrada
-                </h2>
-
-                <p className="text-texto2/60 mt-2 max-w-md">
-                  Nenhuma multa corresponde aos filtros aplicados. Tente ajustar
-                  a pesquisa, os valores ou as gravidades selecionadas.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 2xl:grid-cols-3">
-              {filteredMultas.map((multa) => (
+          <div className="grid grid-cols-1 gap-4 2xl:grid-cols-3">
+            {loading ? (
+              Array.from({ length: 6 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-64 w-full rounded-2xl bg-gray-300"
+                />
+              ))
+            ) : filteredMultas.length > 0 ? (
+              filteredMultas.map((multa) => (
                 <CardMulta
                   key={multa.id}
                   multa={multa}
                   setStateSelectedMulta={setSelectedMulta}
                 />
-              ))}
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 lg:col-span-3">
+                <Search className="text-texto2/30 h-16 w-16" />
+
+                <div className="text-center">
+                  <h2 className="text-texto2 text-xl font-semibold">
+                    Nenhuma multa encontrada
+                  </h2>
+
+                  <p className="text-texto2/60 mt-2 max-w-md">
+                    Nenhuma multa corresponde aos filtros aplicados. Tente
+                    ajustar a pesquisa, os valores ou as gravidades
+                    selecionadas.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>

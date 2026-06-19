@@ -69,16 +69,6 @@ export interface DadosUser {
 
 export type Providers = "LOCAL" | "GOOGLE";
 
-export interface RecursoResponseWithoutMetaData {
-  id: string;
-  nome: string;
-  autoInfracao: string;
-  multa: Multa;
-  payment?: {
-    paidAt: string | null; // vem como string no JSON
-  };
-}
-
 export interface RecursoResponseWithMetaData {
   dadosFormulario: DadosFormulario;
   dadosUsuario: DadosUsuario;

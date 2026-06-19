@@ -1,12 +1,44 @@
 "use client";
 
 import Header from "@/components/Header";
-import { recursosMock } from "@/data/recursos";
 import RecursoCard from "../_components/RecursoCard";
 import Link from "next/link";
 import { User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { UserContext } from "@/context/UserContext";
+import { useAuth } from "@/hook/useAuth";
+import { Recurso } from "@/types";
+import LoadingScreen from "@/components/LoadingScreen";
+import { userService } from "@/services/user.service";
 
 export default function RecursosPage() {
+  const [recursos, setRecursos] = useState<Recurso[]>([]);
+  const { userId, accessToken } = useAuth(UserContext);
+
+  if (!userId || !accessToken) {
+    return (
+      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
+    );
+  }
+
+  useEffect(() => {
+    const fetchRecursos = async () => {
+      try {
+        const response = await userService.getAllRecursos(userId, accessToken);
+
+        if (response.success && response.data) {
+          setRecursos(response.data);
+        } else {
+          console.error(response.error);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar recursos:", error);
+      }
+    };
+
+    fetchRecursos();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col">
       <Header visible={true} />
@@ -28,7 +60,7 @@ export default function RecursosPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            {recursosMock.map((recurso) => (
+            {recursos.map((recurso) => (
               <RecursoCard
                 key={recurso.id}
                 recurso={recurso}

@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import UserStats from "./_components/UserStats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
-import { recursosMock } from "@/data/recursos";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { Recurso } from "@/types";
@@ -12,10 +11,12 @@ import RecursoCard from "./_components/RecursoCard";
 import { formatDate } from "@/lib/utils";
 import { useAuth } from "@/hook/useAuth";
 import { UserContext } from "@/context/UserContext";
+import { userService } from "@/services/user.service";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function ProfilePage() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
-  const { user, session, status } = useAuth(UserContext);
+  const { user, userId, accessToken } = useAuth(UserContext);
 
   const initials = user?.name
     .split(" ")
@@ -24,11 +25,28 @@ export default function ProfilePage() {
     .join("")
     .toUpperCase();
 
+  if (!userId || !accessToken) {
+    return (
+      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
+    );
+  }
+
   useEffect(() => {
-    // IMPLEMENTAR DADOS DA API POSTERIORMENTE
-    setTimeout(() => {
-      setRecursos(recursosMock);
-    }, 1000);
+    const fetchRecursos = async () => {
+      try {
+        const response = await userService.getAllRecursos(userId, accessToken);
+
+        if (response.success && response.data) {
+          setRecursos(response.data);
+        } else {
+          console.error(response.error);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar recursos:", error);
+      }
+    };
+
+    fetchRecursos();
   }, []);
 
   const userStats = useMemo(() => {
@@ -52,7 +70,7 @@ export default function ProfilePage() {
         )
         .toFixed(2),
 
-      ultimaCompra: formatDate(recursosMock[0].payment!.paidAt),
+      ultimaCompra: formatDate(recursos[0].payment!.paidAt),
     };
   }, [recursos]);
 
