@@ -62,7 +62,7 @@ export default function MultasPage() {
         minRecursosPrice: Math.min(...recursosValues),
         maxRecursosPrice: Math.max(...recursosValues),
       };
-    }, []);
+    }, [multas]);
 
   const toggleSeverity = (value: string) => {
     setSelectedSeverities((prev) =>
@@ -104,7 +104,13 @@ export default function MultasPage() {
         matchesRecursosPrice
       );
     });
-  }, [search, selectedSeverities, multasPriceRange, recursosPriceRange]);
+  }, [
+    search,
+    selectedSeverities,
+    multasPriceRange,
+    recursosPriceRange,
+    multas,
+  ]);
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -197,7 +203,7 @@ export default function MultasPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 2xl:grid-cols-3">
-            {loading ? (
+            {loading || multas.length === 0 ? (
               Array.from({ length: 6 }).map((_, index) => (
                 <Skeleton
                   key={index}

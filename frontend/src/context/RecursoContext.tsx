@@ -171,7 +171,7 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
       } catch (error) {
         console.error("Erro ao carregar dados salvos:", error);
       } finally {
-        setLoading(true);
+        setLoading(false);
       }
     };
 
