@@ -8,7 +8,7 @@ interface LoadingScreenProps {
 }
 
 export default function LoadingScreen({
-  text = "Aguarde enquanto recuperamos os dados do recurso e as informações das multas.",
+  text,
 }: LoadingScreenProps) {
   return (
     <div className="bg-fundo2 flex min-h-screen items-center justify-center">
