@@ -13,16 +13,15 @@ import { userService } from "@/services/user.service";
 
 export default function RecursosPage() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
+  const [loading, setLoading] = useState(false);
   const { userId, accessToken } = useAuth(UserContext);
 
-  if (!userId || !accessToken) {
-    return (
-      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
-    );
-  }
-
   useEffect(() => {
+    if (!userId || !accessToken) return;
+
     const fetchRecursos = async () => {
+      setLoading(true);
+
       try {
         const response = await userService.getAllRecursos(userId, accessToken);
 
@@ -33,11 +32,19 @@ export default function RecursosPage() {
         }
       } catch (error) {
         console.error("Erro ao buscar recursos:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecursos();
-  }, []);
+  }, [accessToken, userId]);
+
+  if (!userId || !accessToken || loading) {
+    return (
+      <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col">

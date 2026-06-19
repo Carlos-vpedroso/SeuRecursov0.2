@@ -16,12 +16,15 @@ import LoadingScreen from "@/components/LoadingScreen";
 
 export default function ProfilePage() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
+  const [loading, setLoading] = useState(false);
   const { user, userId, accessToken } = useAuth(UserContext);
 
   useEffect(() => {
     if (!userId || !accessToken) return;
 
     const fetchRecursos = async () => {
+      setLoading(true);
+
       try {
         const response = await userService.getAllRecursos(userId, accessToken);
 
@@ -32,11 +35,13 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error("Erro ao buscar recursos:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecursos();
-  }, []);
+  }, [accessToken, userId]);
 
   const userStats = useMemo(() => {
     return {
@@ -78,7 +83,7 @@ export default function ProfilePage() {
     .join("")
     .toUpperCase();
 
-  if (!userId || !accessToken) {
+  if (!userId || !accessToken || loading) {
     return (
       <LoadingScreen text="Aguarde enquanto recuperamos os dados do usuário e de seus recursos." />
     );
