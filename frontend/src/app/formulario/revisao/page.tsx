@@ -89,7 +89,7 @@ export default function RevisaoPage() {
     }, [pagamentoId]);
 
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen text="Aguarde enquanto recuperamos os dados do recurso e as informações das multas." />;
     }
 
     if (!selectedMulta) {
