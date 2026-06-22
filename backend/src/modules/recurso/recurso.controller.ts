@@ -48,6 +48,15 @@ export class RecursoController {
         });
       }
 
+      const expirationDate = new Date(recurso.createdAt);
+      expirationDate.setDate(expirationDate.getDate() + 7);
+
+      if (new Date() > expirationDate) {
+        return res.status(410).json({
+          message: "O prazo para acesso a este recurso expirou.",
+        });
+      }
+
       return res.status(200).json(recurso);
     } catch (error) {
       console.error(error);

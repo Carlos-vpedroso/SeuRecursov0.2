@@ -154,10 +154,7 @@ export default function ProfilePage() {
               <RecursoCard
                 key={recurso.id}
                 recurso={recurso}
-                onVisualizar={() =>
-                  console.log("visualizar recurso", recurso.id)
-                }
-                onBaixar={() => console.log("baixar recurso", recurso.id)}
+                accessToken={accessToken}
               />
             ))}
           </div>

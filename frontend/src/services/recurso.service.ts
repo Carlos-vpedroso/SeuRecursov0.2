@@ -1,58 +1,53 @@
 import { RecursoResponseWithMetaData } from "@/types";
 
 export class RecursoService {
-    private baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  private baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    async makePDF(
-        recursoId: string,
-        token:string
-    ): Promise<{
-        success: boolean;
-        data?: RecursoResponseWithMetaData;
-        error?: string;
-    }> {
+  async makePDF(
+    recursoId: string,
+    token: string,
+  ): Promise<{
+    success: boolean;
+    data?: RecursoResponseWithMetaData;
+    error?: string;
+    status?: number;
+  }> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/recursos/make-pdf/${recursoId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        },
+      );
 
-        try {
+      const result = await response.json();
 
-            const response = await fetch(
-                `${this.baseUrl}/recursos/make-pdf/${recursoId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    cache: "no-store",
-                }
-            );
+      if (!response.ok) {
+        return {
+          success: false,
+          status: response.status,
+          error: result.message || "Erro ao buscar dados do recurso",
+        };
+      }
 
-            const result = await response.json();
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
 
-            if (!response.ok) {
-                return {
-                    success: false,
-                    error:
-                        result.message ||
-                        "Erro ao buscar dados do recurso",
-                };
-            }
-
-            return {
-                success: true,
-                data: result,
-            };
-
-        } catch (error) {
-
-            console.error("Erro ao gerar PDF:", error);
-
-            return {
-                success: false,
-                error: "Erro inesperado",
-            };
-        }
+      return {
+        success: false,
+        error: "Erro inesperado",
+      };
     }
-
+  }
 }
 
 export const recursoService = new RecursoService();

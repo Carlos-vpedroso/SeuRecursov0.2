@@ -29,6 +29,7 @@ export class RecursoService {
       },
       select: {
         sensitiveData: true,
+        createdAt: true,
       },
     });
 
@@ -38,7 +39,7 @@ export class RecursoService {
 
     const decrypted: MetadataInput = decrypt(recurso.sensitiveData);
 
-    return decrypted;
+    return { ...decrypted, createdAt: recurso.createdAt };
   }
 
   async create(data: {

@@ -73,4 +73,5 @@ export interface RecursoResponseWithMetaData {
   dadosFormulario: DadosFormulario;
   dadosUsuario: DadosUsuario;
   endereco: Address;
+  createdAt: string;
 }

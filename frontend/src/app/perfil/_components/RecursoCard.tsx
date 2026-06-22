@@ -11,11 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { recursoService } from "@/services/recurso.service";
+import GerarPdf from "@/pdfSistem/GerarPdf";
+import { toast } from "sonner";
 
 interface RecursoCardProps {
   recurso: Recurso;
-  onVisualizar: (recurso: Recurso) => void;
-  onBaixar: (recurso: Recurso) => void;
+  accessToken: string;
 }
 
 const severityStyles = {
@@ -27,10 +29,45 @@ const severityStyles = {
 
 export default function RecursoCard({
   recurso,
-  onVisualizar,
-  onBaixar,
+  accessToken,
 }: RecursoCardProps) {
   const severityClass = severityStyles[recurso.multa.tipo_multa];
+
+  const handleMakePDF = async (download: boolean, readOnly: boolean) => {
+    try {
+      if (!accessToken) {
+        console.error("Token não encontrado");
+        return;
+      }
+
+      const response = await recursoService.makePDF(recurso.id, accessToken);
+
+      if (!response.success || !response.data) {
+        if (response.status === 410) {
+          toast.error(
+            response.error || "O prazo para acesso a este recurso expirou.",
+          );
+          return;
+        }
+
+        toast.error(response.error || "Erro ao gerar PDF");
+        return;
+      }
+
+      const { dadosFormulario, dadosUsuario, endereco } = response.data;
+
+      await GerarPdf({
+        dadosRecurso: dadosFormulario,
+        dadosUsuario,
+        endereco,
+        selectedMulta: recurso.multa,
+        download,
+        readOnly,
+      });
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+    }
+  };
 
   return (
     <Card className="border-border/70 bg-card/95 shadow-sm transition-all duration-300">
@@ -96,7 +133,7 @@ export default function RecursoCard({
       <CardFooter className="flex flex-col gap-3 border-t bg-transparent p-4">
         <button
           className="bg-cor1 hover:bg-cor1/90 text-texto flex h-8 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-          onClick={() => onVisualizar(recurso)}
+          onClick={() => handleMakePDF(false, true)}
         >
           <Eye className="h-4 w-4" />
           Visualizar Recurso
@@ -104,7 +141,7 @@ export default function RecursoCard({
 
         <button
           className="bg-cor2 hover:bg-cor2/90 text-texto flex h-8 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-          onClick={() => onBaixar(recurso)}
+          onClick={() => handleMakePDF(true, false)}
         >
           <Download className="h-4 w-4" />
           Baixar Recurso
