@@ -71,10 +71,7 @@ export default function RecursosPage() {
               <RecursoCard
                 key={recurso.id}
                 recurso={recurso}
-                onVisualizar={() =>
-                  console.log("visualizar recurso", recurso.id)
-                }
-                onBaixar={() => console.log("baixar recurso", recurso.id)}
+                accessToken={accessToken}
               />
             ))}
           </div>
