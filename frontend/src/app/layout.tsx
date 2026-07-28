@@ -109,7 +109,7 @@ export const metadata: Metadata = {
       "Crie seu recurso de multa de trânsito online de forma simples, rápida e eficaz. Prepare sua defesa e organize seu recurso para protocolar junto ao DETRAN.",
     images: [
       {
-        url: "/icons/og-image.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Derruba Multa - Recursos de Multas Online",
@@ -122,7 +122,7 @@ export const metadata: Metadata = {
     title: "Derruba Multa | Recursos de Multas Online",
     description:
       "Crie seu recurso de multa de trânsito online de forma simples, rápida e eficaz.",
-    images: ["/icons/og-image.png"],
+    images: ["/og-image.png"],
   },
 
   robots: {
