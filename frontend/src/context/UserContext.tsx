@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
 
 interface UserContextType {

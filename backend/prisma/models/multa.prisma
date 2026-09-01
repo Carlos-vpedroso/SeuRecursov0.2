@@ -8,9 +8,10 @@ model Multa {
     tipo_multa    TipoMulta @default(LEVE)
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
+    deletedAt     DateTime?
 
     pagamentos Pagamento[]
-    recursos Recurso[]
+    recursos   Recurso[]
 }
 
 enum TipoMulta {

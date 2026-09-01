@@ -1,24 +1,34 @@
 import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { JwtPayload } from "../types/jwtPayload";
+import { AuthRequest } from "../types/authRequest";
 
 const adminMiddleware = (
-    req: Request,
-    res: Response,
-    next: NextFunction
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
 ) => {
-    const authHeader = req.headers["authorization"];
-    // Verifica se o header existe e começa com "Bearer"
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ error: "Chave de admin não fornecida" });
-    }
+  const authHeader = req.headers["authorization"];
 
-    const key = authHeader.split(" ")[1]; // pega só a key depois do Bearer
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Token não fornecido" });
+  }
 
-    if (key !== process.env.ADMIN_KEY) {
-        return res.status(403).json({ error: "Chave de admin inválida" });
-    }
+  const token = authHeader.split(" ")[1];
 
-    // Se chegou aqui, está autorizado
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_ADMIN_TOKEN as string,
+    ) as JwtPayload;
+
+    // salva dados do usuário na request
+    req.user = decoded;
+
     next();
+  } catch (error) {
+    return res.status(401).json({ error: "Token inválido ou expirado" });
+  }
 };
 
 export default adminMiddleware;

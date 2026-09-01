@@ -4,40 +4,39 @@ import jwt from "jsonwebtoken";
 import { userService } from "./user.service";
 
 export class UserController {
-    async get(req: Request, res: Response) {
-        try {
-            const users = await userService.findAll()
-            if (!users || users.length === 0) {
-                return res.status(400).json({ error: "Nenhum usuário encontrado." })
-            }
-            return res.status(200).json(users)
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: "Erro ao buscar usuários" });
-        }
+  async get(req: Request, res: Response) {
+    try {
+      const users = await userService.findAll();
+      if (!users || users.length === 0) {
+        return res.status(400).json({ error: "Nenhum usuário encontrado." });
+      }
+      return res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Erro ao buscar usuários" });
     }
+  }
 
-    async getAllRecursos(req: Request<{ id: string }>, res: Response) {
-        try {
-            const { id } = req.params
+  async getAllRecursos(req: Request<{ id: string }>, res: Response) {
+    try {
+      const { id } = req.params;
 
-            if (!id) {
-                return res.status(401).json({
-                    error: "Id não informado",
-                });
-            }
+      if (!id) {
+        return res.status(401).json({
+          error: "Id não informado",
+        });
+      }
 
-            const recursos = await userService.findAllRecursos(id);
+      const recursos = await userService.findAllRecursos(id);
 
-            return res.status(200).json(recursos);
-
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({
-                error: "Erro ao buscar recursos do usuário",
-            });
-        }
+      return res.status(200).json(recursos);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: "Erro ao buscar recursos do usuário",
+      });
     }
+  }
 
     async authGoogle(req: Request, res: Response) {
         try {

@@ -13,7 +13,7 @@ export interface DadosFormulario {
 }
 
 export interface Multa {
-  id: UUID;
+  id: string;
   codigo_multa: string;
   artigo_multa: string;
   tipo_multa: TipoMulta;
@@ -74,4 +74,13 @@ export interface RecursoResponseWithMetaData {
   dadosUsuario: DadosUsuario;
   endereco: Address;
   createdAt: string;
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  username: string;
+  ativo?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
