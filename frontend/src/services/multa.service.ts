@@ -60,6 +60,54 @@ export class MultaService {
     }
   }
 
+  async create(
+    data: Omit<Multa, "id">,
+    adminToken: string,
+  ): Promise<{
+    success: boolean;
+    data?: Multa;
+    error?: string;
+  }> {
+    try {
+      const response = await fetch(`${this.baseUrl}/multas/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify({
+          artigo_multa: data.artigo_multa,
+          codigo_multa: data.codigo_multa,
+          valor_multa: data.valor_multa,
+          valor_recurso: data.valor_recurso,
+          descricao: data.descricao,
+          tipo_multa: data.tipo_multa,
+        }),
+      });
+  
+      const result = await response.json();
+  
+      if (!response.ok) {
+        return {
+          success: false,
+          error: result.error || "Erro ao criar multa",
+        };
+      }
+  
+      return {
+        success: true,
+        data: result,
+      };
+    } catch (error) {
+      console.error("Erro no create:", error);
+  
+      return {
+        success: false,
+        error: "Erro ao criar multa",
+      };
+    }
+  }
+
   async update(
     id: string,
     data: Omit<Multa, "id">,

@@ -50,6 +50,16 @@ const tipoMultaStyle: Record<TipoMulta, string> = {
   GRAVISSIMA: "bg-red-500/10 text-red-400",
 };
 
+const emptyMulta: Multa = {
+  id: "",
+  codigo_multa: "",
+  artigo_multa: "",
+  tipo_multa: "LEVE",
+  descricao: "",
+  valor_multa: "",
+  valor_recurso: "",
+};
+
 const MultasDashboard = () => {
   const { multas, setMultas } = useAuth(DashboardContext);
   const { accessToken } = useAuth(AdminContext);
@@ -79,15 +89,8 @@ const MultasDashboard = () => {
   };
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedMulta, setSelectedMulta] = useState<Multa>({
-    id: "",
-    codigo_multa: "",
-    artigo_multa: "",
-    tipo_multa: "LEVE" as TipoMulta,
-    descricao: "",
-    valor_multa: "",
-    valor_recurso: "",
-  });
+  const [dialogMode, setDialogMode] = useState<"create" | "edit">("edit");
+  const [selectedMulta, setSelectedMulta] = useState<Multa>(emptyMulta);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [multaToDelete, setMultaToDelete] = useState<Multa | null>(null);
@@ -95,12 +98,14 @@ const MultasDashboard = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handleEdit = (multa: Multa) => {
+    setDialogMode("edit");
     setSelectedMulta(multa);
     setIsEditDialogOpen(true);
   };
 
-  const handleUpdate = async () => {
-    if (!selectedMulta || !accessToken) return;
+  const handleSave = async () => {
+    if (!accessToken) return;
+
     setLoading(true);
 
     try {
@@ -113,34 +118,52 @@ const MultasDashboard = () => {
         valor_recurso: selectedMulta.valor_recurso,
       };
 
+      if (dialogMode === "create") {
+        const result = await multaService.create(payload, accessToken);
+
+        if (result.success && result.data) {
+          setMultas((prev) => [...prev, result.data!]);
+
+          setIsEditDialogOpen(false);
+          setSelectedMulta(emptyMulta);
+
+          toast.success("Multa criada com sucesso!");
+          return;
+        }
+
+        toast.error(result.error || "Erro ao criar a multa!");
+        return;
+      }
+
       const result = await multaService.update(
         selectedMulta.id,
         payload,
         accessToken,
       );
+
       if (result.success && result.data) {
-        setIsEditDialogOpen(false);
-        setSelectedMulta({
-          id: "",
-          codigo_multa: "",
-          artigo_multa: "",
-          tipo_multa: "LEVE" as TipoMulta,
-          descricao: "",
-          valor_multa: "",
-          valor_recurso: "",
-        });
-        // atualizar multas no contexto aqui
         setMultas((prev) =>
           prev.map((multa) =>
-            multa.id === result.data?.id ? result.data : multa,
+            multa.id === result.data!.id ? result.data! : multa,
           ),
         );
+
+        setIsEditDialogOpen(false);
+        setSelectedMulta(emptyMulta);
+
         toast.success("Multa atualizada com sucesso!");
         return;
       }
+
       toast.error(result.error || "Erro ao atualizar a multa!");
     } catch (error) {
-      console.error("Erro ao atualizar multa:", error);
+      console.error("Erro ao salvar multa:", error);
+
+      toast.error(
+        dialogMode === "create"
+          ? "Erro inesperado ao criar a multa!"
+          : "Erro inesperado ao atualizar a multa!",
+      );
     } finally {
       setLoading(false);
     }
@@ -201,6 +224,11 @@ const MultasDashboard = () => {
 
         <button
           type="button"
+          onClick={() => {
+            setDialogMode("create");
+            setSelectedMulta(emptyMulta);
+            setIsEditDialogOpen(true);
+          }}
           className="flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
         >
           <Plus className="h-4 w-4" />
@@ -474,10 +502,14 @@ const MultasDashboard = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="bg-fundo2 text-texto2 border-white/10 lg:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Editar multa</DialogTitle>
+            <DialogTitle>
+              {dialogMode === "create" ? "Nova multa" : "Editar multa"}
+            </DialogTitle>
 
             <DialogDescription className="text-zinc-500">
-              Altere os dados da multa cadastrada no sistema.
+              {dialogMode === "create"
+                ? "Cadastre uma nova multa no sistema."
+                : "Altere os dados da multa cadastrada no sistema."}
             </DialogDescription>
           </DialogHeader>
 
@@ -616,14 +648,18 @@ const MultasDashboard = () => {
 
             <button
               type="button"
-              onClick={handleUpdate}
+              onClick={handleSave}
               disabled={loading}
-              className="flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+              className="flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
-                <span>Salvar alterações</span>
+                <span>
+                  {dialogMode === "create"
+                    ? "Criar multa"
+                    : "Salvar alterações"}
+                </span>
               )}
             </button>
           </DialogFooter>
