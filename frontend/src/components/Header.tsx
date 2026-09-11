@@ -1,54 +1,105 @@
-"use client"
-import Image from "next/image"
-import logo from "../../public/LogoSeuRecurso.jpg"
-import Link from "next/link"
-import { UserRound } from "lucide-react"
-import { UserContext } from "@/context/UserContext"
-import { useAuth } from "@/hook/useAuth"
+import { UserContext } from "@/context/UserContext";
+import { useAuth } from "@/hook/useAuth";
+import { motion } from "framer-motion";
+import { LogIn } from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-const Header = () => {
+type HeaderProps = {
+  visible: boolean;
+  position?: "fixed" | "sticky" | "relative";
+  flex?: boolean;
+};
 
-    const { user, SignOut } = useAuth(UserContext);
+export default function Header({
+  visible,
+  position = "sticky",
+  flex = true,
+}: HeaderProps) {
+  const { user } = useAuth(UserContext);
 
-    return (
-        <div className="flex p-4 items-center justify-between md:justify-around bg-white">
-            <Link
-                className="text-azul tracking-widest text-xl font-medium hidden md:flex"
-                href="/"
-            >
-                SEU RECURSO
+  const initials = user?.name
+    .split(" ")
+    .slice(0, 2)
+    .map((n: any) => n[0])
+    .join("")
+    .toUpperCase();
+
+  return (
+    <header
+      className={` ${position} top-0 left-0 z-50 w-full transition-all duration-500 ${
+        visible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none -translate-y-4 opacity-0"
+      } `}
+    >
+      <div
+        className={`bg-fundo/80 mx-auto h-20 px-6 backdrop-blur-md ${flex ? "flex items-center justify-between" : ""} `}
+      >
+        <div className="mx-auto flex w-full items-center justify-between lg:max-w-11/12">
+          {/* LOGOTIPO */}
+          <Link
+            href="/"
+            className="font-title text-texto text-lg font-bold tracking-wide uppercase lg:text-3xl"
+          >
+            <img
+              src="/Logo_Derruba.png"
+              alt="Logo Derruba"
+              className="mt-2 h-24 w-24 object-contain"
+            />
+          </Link>
+
+          {/* BOTÃO */}
+          {user ? (
+            <Link href="/perfil" className="flex items-center gap-4">
+              <Avatar className="ring-cor1/40 ring-offset-fundo2 h-12 w-12 ring-2 ring-offset-2">
+                <AvatarImage
+                  src={user?.image || ""}
+                  alt={user?.name || "Usuário"}
+                />
+                <AvatarFallback className="bg-cor1/20 bg- text-cor1 font-title text-2xl font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+
+              <span className="text-texto font-title hidden text-xl lg:block">
+                {user?.name}
+              </span>
             </Link>
-            <Link href="/">
-                <Image
-                    src={logo}
-                    height={50}
-                    width={50}
-                    alt="Logo Seu Recurso"
-                    className="md:hidden h-auto w-auto"
-                    priority
+          ) : (
+            <Link href="/perfil">
+              <motion.button
+                initial="initial"
+                whileHover="hover"
+                className="bg-cor1 text-texto relative flex shrink-0 -skew-x-21 cursor-pointer items-center gap-2 overflow-hidden px-6 py-3 font-semibold uppercase"
+              >
+                {/* Background animado */}
+                <motion.div
+                  variants={{
+                    initial: {
+                      x: "-100%",
+                      opacity: 0,
+                    },
+                    hover: {
+                      x: "0%",
+                      opacity: 1,
+                    },
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                  className="bg-fundo absolute inset-0 z-0"
                 />
 
+                {/* Texto */}
+                <span className="relative z-10 skew-x-21">Área do Cliente</span>
+                <LogIn className="skew-x-21" />
+              </motion.button>
             </Link>
-            {user === null &&
-                <Link
-                    className="bg-azul rounded-md px-3 py-1 text-white font-semibold"
-                    href={user ? '/perfil' : '/login'}
-                >
-                    Área do Cliente
-                </Link>
-            }
-            {user &&
-                <div className="flex items-center">
-                    <Link
-                        href="/perfil"
-                        className="shadow-sm rounded-md bg-gray-200 px-2 py-1 mr-2 cursor-pointer hover:bg-gray-400 transition duration-300">
-                        <UserRound className="text-azul w-7 h-7" />
-                    </Link>
-                    <button className="font-semibold text-red-500 cursor-pointer hover:underline transition duration-300 " onClick={() => SignOut()}>Sair</button>
-                </div>
-            }
+          )}
         </div>
-    )
+      </div>
+    </header>
+  );
 }
-
-export default Header

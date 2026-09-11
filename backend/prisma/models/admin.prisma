@@ -1,0 +1,11 @@
+model Admin {
+    id       String @id @default(uuid())
+    username String @unique
+    name     String
+    password String
+
+    ativo Boolean @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

@@ -1,18 +1,12 @@
 model User {
-    id        String    @id @default(uuid())
-    nome      String
-    email     String    @unique
-    password  String?
-    telefone  String?
-    provider  Providers @default(LOCAL)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+    id       String  @id @default(uuid())
+    nome     String
+    email    String  @unique
+    imageUrl String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     pagamentos Pagamento[]
     recursos   Recurso[]
-}
-
-enum Providers {
-    GOOGLE
-    LOCAL
 }

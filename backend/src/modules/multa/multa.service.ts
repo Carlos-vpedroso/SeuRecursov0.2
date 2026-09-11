@@ -21,8 +21,11 @@ export class MultaService {
   // Buscar todas multas
   async findAll(): Promise<Multa[]> {
     return prisma.multa.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
   }
@@ -58,7 +61,7 @@ export class MultaService {
       valor_recurso: number;
       descricao: string;
       tipo_multa: TipoMulta;
-    }>
+    }>,
   ): Promise<Multa> {
     return prisma.multa.update({
       where: { id },
@@ -70,6 +73,16 @@ export class MultaService {
   async delete(id: string): Promise<Multa> {
     return prisma.multa.delete({
       where: { id },
+    });
+  }
+
+  // Deletar multa
+  async softDelete(id: string): Promise<Multa> {
+    return prisma.multa.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
     });
   }
 }

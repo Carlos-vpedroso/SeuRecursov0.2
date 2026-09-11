@@ -8,11 +8,13 @@ multaRouter.get("/all", multaController.getAll);
 
 multaRouter.get("/get/:id", multaController.getById);
 
-multaRouter.post("/create", adminMiddleware, multaController.createMulta)
+multaRouter.post("/create", adminMiddleware, multaController.createMulta);
 
-multaRouter.delete("/delete/:id", adminMiddleware, multaController.delete)
+multaRouter.put("/update/:id", adminMiddleware, multaController.update);
+
+multaRouter.delete("/delete/:id", adminMiddleware, multaController.delete);
 
 export default {
-    path: "/multas",
-    router: multaRouter
-}
+  path: "/multas",
+  router: multaRouter,
+};
