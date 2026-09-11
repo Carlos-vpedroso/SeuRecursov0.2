@@ -6,6 +6,7 @@ import { MessageCircle, Mail, MapPin, Phone, MoveRight } from "lucide-react";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -186,19 +187,19 @@ export default function Footer() {
                 href="#"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
-                <MessageCircle className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
+                <FaWhatsapp className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
               </a>
               <a
                 href="#"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
-                <MessageCircle className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
+                <FaInstagram className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
               </a>
               <a
                 href="#"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
-                <MessageCircle className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
+                <FaFacebook className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
               </a>
             </div>
           </div>
@@ -286,8 +287,8 @@ export default function Footer() {
       <div className="relative z-10 border-t border-white/5">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 text-sm text-gray-500 md:flex-row">
           <p>
-            © 2026 <span className="text-cor2">TecZed Solutions</span>. Todos os
-            direitos reservados.
+            ©<span className="text-cor2">DerrubaMulta</span>{" "}
+            {new Date().getFullYear()}. Todos os direitos reservados.
           </p>
 
           <div className="flex gap-6">
@@ -299,6 +300,17 @@ export default function Footer() {
               Acessibilidade
             </a>
           </div>
+          <Link
+            href="https://www.teczed.com"
+            target="_blank"
+            className="text-cor2"
+          >
+            <img
+              src="/TecZed_Logo.png"
+              alt="Logo TecZed"
+              className="h-14 w-14 object-contain"
+            />
+          </Link>
         </div>
       </div>
     </section>

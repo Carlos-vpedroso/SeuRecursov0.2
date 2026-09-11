@@ -42,7 +42,11 @@ export default function Header({
             href="/"
             className="font-title text-texto text-lg font-bold tracking-wide uppercase lg:text-3xl"
           >
-            Derruba Multa
+            <img
+              src="/Logo_Derruba.png"
+              alt="Logo Derruba"
+              className="mt-2 h-24 w-24 object-contain"
+            />
           </Link>
 
           {/* BOTÃO */}
