@@ -2,6 +2,9 @@
 CREATE TYPE "TipoMulta" AS ENUM ('LEVE', 'MEDIA', 'GRAVE', 'GRAVISSIMA');
 
 -- CreateEnum
+CREATE TYPE "TipoRecurso" AS ENUM ('ADMINISTRATIVO', 'ADMINISTRATIVO_EQUIPAMENTO', 'VELOCIDADE');
+
+-- CreateEnum
 CREATE TYPE "PaymentMethod" AS ENUM ('PIX', 'CREDIT_CARD');
 
 -- CreateEnum
@@ -10,8 +13,18 @@ CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAILED', 'EXPIRED');
 -- CreateEnum
 CREATE TYPE "PaymentGateway" AS ENUM ('SICOOB', 'INFINITEPAY');
 
--- CreateEnum
-CREATE TYPE "Providers" AS ENUM ('GOOGLE', 'LOCAL');
+-- CreateTable
+CREATE TABLE "Admin" (
+    "id" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "ativo" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Multa" (
@@ -22,8 +35,10 @@ CREATE TABLE "Multa" (
     "valor_recurso" DECIMAL(10,2) NOT NULL,
     "descricao" TEXT NOT NULL,
     "tipo_multa" "TipoMulta" NOT NULL DEFAULT 'LEVE',
+    "tipo_recurso" "TipoRecurso" NOT NULL DEFAULT 'ADMINISTRATIVO',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "Multa_pkey" PRIMARY KEY ("id")
 );
@@ -69,14 +84,15 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT,
-    "telefone" TEXT,
-    "provider" "Providers" NOT NULL DEFAULT 'LOCAL',
+    "imageUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Admin_username_key" ON "Admin"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Multa_artigo_multa_key" ON "Multa"("artigo_multa");
