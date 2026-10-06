@@ -16,6 +16,7 @@ interface AdminContextType {
     error?: string;
   }>;
   logout: () => void;
+  loading: boolean;
 }
 
 export const AdminContext = createContext<AdminContextType | undefined>(
@@ -30,6 +31,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
   const [admin, setAdmin] = useState<AdminUser | null>(null);
 
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const login = async (
     username: string,
@@ -86,6 +88,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
   useEffect(() => {
     const restoreSession = () => {
+      setLoading(true);
       try {
         const token = Cookies.get("adminToken");
 
@@ -140,6 +143,8 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
         setAccessToken(null);
         setAdmin(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -147,7 +152,9 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
   }, []);
 
   return (
-    <AdminContext.Provider value={{ admin, accessToken, login, logout }}>
+    <AdminContext.Provider
+      value={{ admin, accessToken, login, logout, loading }}
+    >
       {children}
     </AdminContext.Provider>
   );

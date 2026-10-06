@@ -23,7 +23,7 @@ import { DashboardContext } from "@/context/DashboardContext";
 import { useAuth } from "@/hook/useAuth";
 import { formatCurrency } from "@/lib/utils";
 import { multaService } from "@/services/multa.service";
-import { Multa, TipoMulta } from "@/types";
+import { Multa, TipoMulta, TipoRecurso } from "@/types";
 import {
   Search,
   Filter,
@@ -55,11 +55,11 @@ const emptyMulta: Multa = {
   codigo_multa: "",
   artigo_multa: "",
   tipo_multa: "LEVE",
+  tipo_recurso: "ADMINISTRATIVO",
   descricao: "",
   valor_multa: "",
   valor_recurso: "",
 };
-
 const MultasDashboard = () => {
   const { multas, setMultas } = useAuth(DashboardContext);
   const { accessToken } = useAuth(AdminContext);
@@ -97,6 +97,22 @@ const MultasDashboard = () => {
 
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const SelectTipo_multa: { value: TipoMulta; label: string }[] = [
+    { value: "LEVE", label: "Leve" },
+    { value: "MEDIA", label: "Média" },
+    { value: "GRAVE", label: "Grave" },
+    { value: "GRAVISSIMA", label: "Gravíssima" },
+  ];
+
+  const SelectTipo_recurso: { value: TipoRecurso; label: string }[] = [
+    { value: "ADMINISTRATIVO", label: "Administrativo" },
+    {
+      value: "ADMINISTRATIVO_EQUIPAMENTO",
+      label: "Administrativo + Equipamento Medidor",
+    },
+    { value: "VELOCIDADE", label: "Velocidade" },
+  ];
+
   const handleEdit = (multa: Multa) => {
     setDialogMode("edit");
     setSelectedMulta(multa);
@@ -113,6 +129,7 @@ const MultasDashboard = () => {
         codigo_multa: selectedMulta.codigo_multa,
         artigo_multa: selectedMulta.artigo_multa,
         tipo_multa: selectedMulta.tipo_multa,
+        tipo_recurso: selectedMulta.tipo_recurso,
         descricao: selectedMulta.descricao,
         valor_multa: selectedMulta.valor_multa,
         valor_recurso: selectedMulta.valor_recurso,
@@ -567,13 +584,37 @@ const MultasDashboard = () => {
                 </SelectTrigger>
 
                 <SelectContent className="bg-fundo2 border-white/10">
-                  <SelectItem value="LEVE">Leve</SelectItem>
+                  {SelectTipo_multa.map((each) => (
+                    <SelectItem key={each.value} value={each.value}>
+                      {each.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {/* Tipo do Recurso */}
+            <div className="space-y-2">
+              <Label>Tipo do Recurso</Label>
 
-                  <SelectItem value="MEDIA">Média</SelectItem>
+              <Select
+                value={selectedMulta.tipo_recurso}
+                onValueChange={(value) =>
+                  setSelectedMulta((prev) => ({
+                    ...prev,
+                    tipo_recurso: value as TipoRecurso,
+                  }))
+                }
+              >
+                <SelectTrigger className="bg-card w-full border-black/10">
+                  <SelectValue />
+                </SelectTrigger>
 
-                  <SelectItem value="GRAVE">Grave</SelectItem>
-
-                  <SelectItem value="GRAVISSIMA">Gravíssima</SelectItem>
+                <SelectContent className="bg-fundo2 border-white/10">
+                  {SelectTipo_recurso.map((each) => (
+                    <SelectItem key={each.value} value={each.value}>
+                      {each.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

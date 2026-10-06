@@ -1,7 +1,7 @@
 "use client";
 
 import { Download, Eye, Clock3 } from "lucide-react";
-import { Recurso } from "@/types";
+import { Recurso, TipoDefesa } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { recursoService } from "@/services/recurso.service";
+import GerarPdf from "@/pdfSistem/index";
 import { toast } from "sonner";
-import GerarPdf from "@/pdfSistem";
+import { useState } from "react";
 
 interface RecursoCardProps {
   recurso: Recurso;
-  accessToken: string;
 }
 
 const severityStyles = {
@@ -27,34 +27,45 @@ const severityStyles = {
   GRAVISSIMA: "border-red-500/20 bg-red-500/10 text-red-600",
 };
 
-export default function RecursoCard({
-  recurso,
-  accessToken,
-}: RecursoCardProps) {
+export default function RecursoCardTest({ recurso }: RecursoCardProps) {
   const severityClass = severityStyles[recurso.multa.tipo_multa];
+  const [gerandoPdf, setGerandoPdf] = useState(false);
 
   const handleMakePDF = async (download: boolean, readOnly: boolean) => {
     try {
-      if (!accessToken) {
-        console.error("Token não encontrado");
-        return;
-      }
-
-      const response = await recursoService.makePDF(recurso.id, accessToken);
-
-      if (!response.success || !response.data) {
-        if (response.status === 410) {
-          toast.error(
-            response.error || "O prazo para acesso a este recurso expirou.",
-          );
-          return;
-        }
-
-        toast.error(response.error || "Erro ao gerar PDF");
-        return;
-      }
-
-      const { dadosFormulario, dadosUsuario, endereco } = response.data;
+      const { dadosFormulario, dadosUsuario, endereco, ...otherData } = {
+        dadosFormulario: {
+          tipoDefesa: "Defesa Prévia" as TipoDefesa,
+          fato: "NÃO",
+          fatoComentario: "",
+          notificado: "NÃO",
+          tempoNotificacao: "NÃO",
+          agente: "SIM",
+          acessoAuto: "SIM",
+          patio: "NÃO",
+          patioComentario: "",
+        },
+        dadosUsuario: {
+          nome: "Carlos Pedroso",
+          cpf: "130.996.416-50",
+          rg: "19.385.742",
+          celular: "(35) 99720-9919",
+          ufEmissao: "",
+          autoInfracao: "123456",
+          placaVeiculo: "RVX1F73",
+          tipoUsuario: "",
+          solicitante: "Condutor",
+        },
+        endereco: {
+          cep: "37955-366",
+          logradouro: "",
+          numero: "",
+          bairro: "",
+          cidade: "São Sebastião do Paraíso",
+          uf: "MG",
+        },
+        createdAt: "2026-09-17T13:31:03.892Z",
+      };
 
       await GerarPdf({
         dadosFormulario,

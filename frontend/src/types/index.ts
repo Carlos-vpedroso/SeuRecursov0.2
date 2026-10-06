@@ -1,31 +1,38 @@
 import { UUID } from "node:crypto";
 
 export interface DadosFormulario {
-  tipoDefesa: string;
+  tipoDefesa: TipoDefesa;
   fato: string;
   fatoComentario: string;
-  notificado: string;
   tempoNotificacao: string;
   agente: string;
   acessoAuto: string;
-  patio: string;
-  patioComentario: string;
 }
+
+export type TipoDefesa = "Defesa Prévia" | "Jari" | "Cetran";
 
 export interface Multa {
   id: string;
   codigo_multa: string;
   artigo_multa: string;
   tipo_multa: TipoMulta;
+  tipo_recurso: TipoRecurso;
   descricao: string;
   valor_multa: string;
   valor_recurso: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
 }
 export type TipoMulta = "LEVE" | "MEDIA" | "GRAVE" | "GRAVISSIMA";
 
+export type TipoRecurso =
+  | "ADMINISTRATIVO"
+  | "ADMINISTRATIVO_EQUIPAMENTO"
+  | "VELOCIDADE";
+
 export interface Recurso {
   id: UUID;
-  multaId: UUID;
   multa: Multa;
   nome: string;
   autoInfracao: string;
@@ -41,18 +48,16 @@ export interface DadosUsuario {
   cpf: string;
   rg: string;
   celular: string;
-  ufEmissao: string;
   autoInfracao: string;
   placaVeiculo: string;
-  tipoUsuario: string;
   solicitante: string;
 }
 
 export interface Address {
   cep: string;
-  logradouro: string;
-  numero: string;
-  bairro: string;
+  logradouro?: string;
+  numero?: string;
+  bairro?: string;
   cidade: string;
   uf: string;
 }

@@ -1,4 +1,8 @@
-import { Multa, TipoMulta } from "../../../generated/prisma/client";
+import {
+  Multa,
+  TipoMulta,
+  TipoRecurso,
+} from "../../../generated/prisma/client";
 import prisma from "../../config/prisma";
 
 export class MultaService {
@@ -9,7 +13,8 @@ export class MultaService {
     valor_multa: number;
     valor_recurso: number;
     descricao: string;
-    tipo_multa?: TipoMulta;
+    tipo_multa: TipoMulta;
+    tipo_recurso: TipoRecurso;
   }): Promise<Multa> {
     return prisma.multa.create({
       data: {
@@ -61,6 +66,7 @@ export class MultaService {
       valor_recurso: number;
       descricao: string;
       tipo_multa: TipoMulta;
+      tipo_recurso: TipoRecurso;
     }>,
   ): Promise<Multa> {
     return prisma.multa.update({

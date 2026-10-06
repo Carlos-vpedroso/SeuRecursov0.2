@@ -67,25 +67,20 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
   const [multas, setMultas] = useState<Multa[]>([]);
   const [selectedMulta, setSelectedMulta] = useState<Multa | null>(null);
   const [dadosFormulario, setDadosFormulario] = useState<DadosFormulario>({
-    tipoDefesa: "",
+    tipoDefesa: "Defesa Prévia",
     fato: "",
     fatoComentario: "",
-    notificado: "",
     tempoNotificacao: "",
     agente: "",
     acessoAuto: "",
-    patio: "",
-    patioComentario: "",
   });
   const [dadosUsuario, setDadosUsuario] = useState<DadosUsuario>({
     nome: "",
     cpf: "",
     rg: "",
     celular: "",
-    ufEmissao: "",
     autoInfracao: "",
     placaVeiculo: "",
-    tipoUsuario: "",
     solicitante: "",
   });
   const [endereco, setEndereco] = useState<Address>({

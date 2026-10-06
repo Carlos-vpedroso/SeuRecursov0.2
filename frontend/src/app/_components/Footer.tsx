@@ -306,9 +306,10 @@ export default function Footer() {
             className="text-cor2"
           >
             <img
-              src="/TecZed_Logo.png"
-              alt="Logo TecZed"
-              className="h-14 w-14 object-contain"
+              src="/TecZed_Triangle+TECZED.svg"
+              alt="TecZed Solutions"
+              width={48}
+              height={48}
             />
           </Link>
         </div>

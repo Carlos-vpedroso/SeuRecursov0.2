@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { multaService } from "./multa.service";
+import { TipoMulta, TipoRecurso } from "../../../generated/prisma/enums";
 
 export class MultaController {
   async getAll(req: Request, res: Response) {
@@ -57,6 +58,7 @@ export class MultaController {
         valor_recurso,
         descricao,
         tipo_multa,
+        tipo_recurso,
       } = req.body;
 
       // Validação básica
@@ -65,6 +67,8 @@ export class MultaController {
         !codigo_multa ||
         !valor_multa ||
         !valor_recurso ||
+        !tipo_multa ||
+        !tipo_recurso ||
         !descricao
       ) {
         return res.status(400).json({
@@ -95,6 +99,7 @@ export class MultaController {
         valor_recurso: Number(valor_recurso),
         descricao,
         tipo_multa: tipo_multa ?? "LEVE",
+        tipo_recurso: tipo_recurso ?? "ADMINISTRATIVO",
       });
 
       return res.status(201).json(multa);
@@ -132,6 +137,7 @@ export class MultaController {
         valor_recurso,
         descricao,
         tipo_multa,
+        tipo_recurso,
       } = req.body;
 
       // Verifica se o código já pertence a outra multa
@@ -163,7 +169,8 @@ export class MultaController {
         valor_multa?: number;
         valor_recurso?: number;
         descricao?: string;
-        tipo_multa?: "LEVE" | "MEDIA" | "GRAVE" | "GRAVISSIMA";
+        tipo_multa?: TipoMulta;
+        tipo_recurso?: TipoRecurso;
       } = {};
 
       if (artigo_multa !== undefined) {
@@ -207,12 +214,27 @@ export class MultaController {
 
         if (!tiposValidos.includes(tipo_multa)) {
           return res.status(400).json({
-            error:
-              "tipo_multa inválido. Valores permitidos: LEVE, MEDIA, GRAVE, GRAVISSIMA",
+            error: "tipo_multa inválido.",
           });
         }
 
         data.tipo_multa = tipo_multa;
+      }
+
+      if (tipo_recurso !== undefined) {
+        const tiposValidos = [
+          "ADMINISTRATIVO",
+          "ADMINISTRATIVO_EQUIPAMENTO",
+          "VELOCIDADE",
+        ];
+
+        if (!tiposValidos.includes(tipo_recurso)) {
+          return res.status(400).json({
+            error: "tipo_recurso inválido.",
+          });
+        }
+
+        data.tipo_recurso = tipo_recurso;
       }
 
       // Atualiza a multa

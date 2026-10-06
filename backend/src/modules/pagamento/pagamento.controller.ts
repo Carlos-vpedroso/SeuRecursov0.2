@@ -9,11 +9,6 @@ function validateRequiredFields(obj: any, path = ""): string[] {
 
     const optionalFields = [
         "dadosFormulario.fatoComentario",
-        "dadosFormulario.acessoAuto",
-        "dadosFormulario.patio",
-        "dadosFormulario.patioComentario",
-        "dadosUsuario.ufEmissao",
-        "dadosUsuario.tipoUsuario",
         "endereco.logradouro",
         "endereco.numero",
         "endereco.bairro",

@@ -6,6 +6,7 @@ import Multas from "./_components/Multas";
 import Testimonials from "./_components/Testimonials";
 import Faq from "./_components/Faq";
 import Footer from "./_components/Footer";
+import RecursoCardTest from "./perfil/_components/RecursoCardTest";
 
 export default function Home() {
   const [showHeader, setShowHeader] = useState(false);

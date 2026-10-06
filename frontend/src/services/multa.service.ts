@@ -82,25 +82,26 @@ export class MultaService {
           valor_recurso: data.valor_recurso,
           descricao: data.descricao,
           tipo_multa: data.tipo_multa,
+          tipo_recurso: data.tipo_recurso,
         }),
       });
-  
+
       const result = await response.json();
-  
+
       if (!response.ok) {
         return {
           success: false,
           error: result.error || "Erro ao criar multa",
         };
       }
-  
+
       return {
         success: true,
         data: result,
       };
     } catch (error) {
       console.error("Erro no create:", error);
-  
+
       return {
         success: false,
         error: "Erro ao criar multa",

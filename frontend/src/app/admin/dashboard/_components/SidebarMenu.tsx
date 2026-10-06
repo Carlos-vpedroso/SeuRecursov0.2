@@ -14,8 +14,9 @@ import {
   Menu,
   X,
   FileText,
+  LoaderCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminContext } from "@/context/AdminContext";
 import { useAuth } from "@/hook/useAuth";
 
@@ -26,7 +27,7 @@ const mainNavigation = [
     icon: LayoutDashboard,
   },
   {
-    label: "Recurso",
+    label: "Gerar Recurso",
     page: "Recurso",
     icon: FileText,
   },
@@ -61,12 +62,19 @@ const secondaryNavigation = [
 ];
 
 export default function SidebarMenu() {
-  const { admin, logout } = useAuth(AdminContext);
+  const { admin, logout, loading } = useAuth(AdminContext);
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const showUser = mounted && !loading && admin;
 
   const currentPage = searchParams.get("Page") ?? "Dashboard";
 
@@ -248,17 +256,21 @@ export default function SidebarMenu() {
           <div className="border-t border-white/10 p-4">
             <div className="flex items-center gap-3 rounded-xl p-2 transition select-none">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 text-sm font-bold">
-                {admin?.name
-                  .split(" ")
-                  .slice(0, 2)
-                  .map((name) => name[0])
-                  .join("")
-                  .toUpperCase() || ""}
+                {!showUser ? (
+                  <LoaderCircle className="h-5 w-5 animate-spin" />
+                ) : (
+                  admin.name
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((name) => name[0])
+                    .join("")
+                    .toUpperCase()
+                )}
               </div>
 
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-white">
-                  {admin?.name || "Usuário"}
+                  {!showUser ? "Usuário" : admin.name}
                 </p>
 
                 <p className="truncate text-xs text-zinc-500">Administrador</p>

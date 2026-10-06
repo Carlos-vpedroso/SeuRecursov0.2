@@ -1,4 +1,5 @@
 import Multas from "./_components/MultasDashboard";
+import RecursoDashboard from "./_components/RecursoDashboard";
 import Working from "./_components/Working";
 
 type PageProps = {
@@ -13,6 +14,9 @@ export default async function Page({ searchParams }: PageProps) {
   const page = params.Page ?? "Dashboard";
 
   switch (page) {
+    case "Recurso":
+      return <RecursoDashboard />;
+
     case "Multas":
       return <Multas />;
 

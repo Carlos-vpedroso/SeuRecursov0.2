@@ -15,14 +15,11 @@ type StepProps = {
   onBack: () => void;
   onNext: () => void;
   fato: string;
-  notificado: string;
   tempoNotificacao: string;
   agente: string;
   acessoAuto: string;
-  patio: string;
   comentarios: {
     fato: string;
-    patio: string;
   };
   setDadosFormulario: React.Dispatch<React.SetStateAction<DadosFormulario>>;
 };
@@ -31,21 +28,16 @@ export default function Questions({
   onBack,
   onNext,
   fato,
-  notificado,
   tempoNotificacao,
   agente,
   acessoAuto,
-  patio,
   comentarios,
   setDadosFormulario,
 }: StepProps) {
   const podeAvancar =
     (fato === "NÃO" || (fato === "SIM" && comentarios.fato !== "")) &&
-    notificado !== "" &&
     agente !== "" &&
-    (agente === "NÃO" ||
-      (acessoAuto !== "" &&
-        (patio === "NÃO" || (patio === "SIM" && comentarios.patio !== ""))));
+    (agente === "NÃO" || acessoAuto !== "");
   return (
     <Card className="bg-card flex h-full w-full flex-col justify-between select-none">
       <CardHeader>
@@ -123,61 +115,13 @@ export default function Questions({
             </AnimatePresence>
           </div>
         </main>
-        {/* Notificação */}
-        <main className="border-border flex w-full gap-4 rounded-md border p-4">
-          <div className="flex flex-1 flex-col gap-2">
-            {/* Question */}
-            <div className="flex items-center">
-              <div className="bg-cor1 flex h-4 w-4 items-center justify-center rounded-full p-4 font-bold text-white">
-                <span>02</span>
-              </div>
-            </div>
-            <h1 className="text-lg">
-              Você recebeu a primeira notificação da infração pelo correio?
-            </h1>
-
-            {/* Answer */}
-            <div className="flex items-center gap-4">
-              <div
-                onClick={() =>
-                  setDadosFormulario((prev) => ({
-                    ...prev,
-                    notificado: "NÃO",
-                  }))
-                }
-                className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${
-                  notificado === "NÃO"
-                    ? "border-cor1 bg-cor1/10"
-                    : "border-border"
-                } `}
-              >
-                <span>Não</span>
-              </div>
-              <div
-                onClick={() =>
-                  setDadosFormulario((prev) => ({
-                    ...prev,
-                    notificado: "SIM",
-                  }))
-                }
-                className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${
-                  notificado === "SIM"
-                    ? "border-cor1 bg-cor1/10"
-                    : "border-border"
-                } `}
-              >
-                <span>Sim</span>
-              </div>
-            </div>
-          </div>
-        </main>
         {/* Tempo Notificação */}
         <main className="border-border flex w-full gap-4 rounded-md border p-4">
           <div className="flex flex-1 flex-col gap-2">
             {/* Question */}
             <div className="flex items-center">
               <div className="bg-cor1 flex h-4 w-4 items-center justify-center rounded-full p-4 font-bold text-white">
-                <span>03</span>
+                <span>02</span>
               </div>
             </div>
             <h1 className="text-lg">
@@ -226,7 +170,7 @@ export default function Questions({
             {/* Question */}
             <div className="flex items-center">
               <div className="bg-cor1 flex h-4 w-4 items-center justify-center rounded-full p-4 font-bold text-white">
-                <span>04</span>
+                <span>03</span>
               </div>
             </div>
             <h1 className="text-lg">
@@ -284,7 +228,7 @@ export default function Questions({
                   {/* Question */}
                   <div className="flex items-center">
                     <div className="bg-cor1 flex h-4 w-4 items-center justify-center rounded-full p-4 font-bold text-white">
-                      <span>05</span>
+                      <span>04</span>
                     </div>
                   </div>
                   <h1 className="text-lg">
@@ -325,84 +269,6 @@ export default function Questions({
                       <span>Sim</span>
                     </div>
                   </div>
-                </div>
-              </motion.main>
-              {/* Pátio */}
-              <motion.main
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="border-border flex w-full gap-4 rounded-md border p-4"
-              >
-                <div className="flex flex-1 flex-col gap-2">
-                  {/* Question */}
-                  <div className="flex items-center">
-                    <div className="bg-cor1 flex h-4 w-4 items-center justify-center rounded-full p-4 font-bold text-white">
-                      <span>06</span>
-                    </div>
-                  </div>
-                  <h1 className="text-lg">
-                    Seu veículo foi removido ao pátio ou foi liberado?
-                  </h1>
-
-                  {/* Answer */}
-                  <div className="flex items-center gap-4">
-                    <div
-                      onClick={() =>
-                        setDadosFormulario((prev) => ({
-                          ...prev,
-                          patio: "NÃO",
-                        }))
-                      }
-                      className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${
-                        patio === "NÃO"
-                          ? "border-cor1 bg-cor1/10"
-                          : "border-border"
-                      } `}
-                    >
-                      <span>Removido</span>
-                    </div>
-                    <div
-                      onClick={() =>
-                        setDadosFormulario((prev) => ({
-                          ...prev,
-                          patio: "SIM",
-                        }))
-                      }
-                      className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${
-                        patio === "SIM"
-                          ? "border-cor1 bg-cor1/10"
-                          : "border-border"
-                      }`}
-                    >
-                      <span>Liberado</span>
-                    </div>
-                  </div>
-                  <AnimatePresence>
-                    {patio === "SIM" && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="w-full overflow-hidden"
-                      >
-                        <div className="flex w-full items-center justify-center pt-2">
-                          <textarea
-                            onChange={(e) =>
-                              setDadosFormulario((prev) => ({
-                                ...prev,
-                                patioComentario: e.target.value,
-                              }))
-                            }
-                            placeholder="Apenas cite o nome para quem foi liberado o veículo"
-                            rows={4}
-                            className="border-input max-h-20 w-full resize-none rounded-lg border bg-transparent px-3 py-2 text-sm outline-none"
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
               </motion.main>
             </>

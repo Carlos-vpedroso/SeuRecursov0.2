@@ -25,6 +25,16 @@ export default function Header({
     .join("")
     .toUpperCase();
 
+  const displayName = (() => {
+    if (!user?.name) return "";
+
+    const names = user.name.trim().split(/\s+/);
+
+    if (names.length === 1) return names[0];
+
+    return `${names[0]} ${names[names.length - 1]}`;
+  })();
+
   return (
     <header
       className={` ${position} top-0 left-0 z-50 w-full transition-all duration-500 ${
@@ -63,7 +73,7 @@ export default function Header({
               </Avatar>
 
               <span className="text-texto font-title hidden text-xl lg:block">
-                {user?.name}
+                {displayName}
               </span>
             </Link>
           ) : (
