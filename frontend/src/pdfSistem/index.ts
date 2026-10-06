@@ -13,12 +13,14 @@ import { formatarNome, formatarDataAtual } from "./utils";
 
 import { recursoTemplate } from "./templates/index";
 
+const baseUrl = window.location.origin;
+
 pdfMake.fonts = {
   LibreBaskerville: {
-    normal: "http://localhost:3001/fonts/LibreBaskerville-Regular.ttf",
-    bold: "http://localhost:3001/fonts/LibreBaskerville-Bold.ttf",
-    italics: "http://localhost:3001/fonts/LibreBaskerville-Italic.ttf",
-    bolditalics: "http://localhost:3001/fonts/LibreBaskerville-BoldItalic.ttf",
+    normal: `${baseUrl}/fonts/LibreBaskerville-Regular.ttf`,
+    bold: `${baseUrl}/fonts/LibreBaskerville-Bold.ttf`,
+    italics: `${baseUrl}/fonts/LibreBaskerville-Italic.ttf`,
+    bolditalics: `${baseUrl}/fonts/LibreBaskerville-BoldItalic.ttf`,
   },
 };
 
