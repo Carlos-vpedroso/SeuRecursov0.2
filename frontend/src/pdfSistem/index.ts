@@ -13,17 +13,6 @@ import { formatarNome, formatarDataAtual } from "./utils";
 
 import { recursoTemplate } from "./templates/index";
 
-const baseUrl = window.location.origin;
-
-pdfMake.fonts = {
-  LibreBaskerville: {
-    normal: `${baseUrl}/fonts/LibreBaskerville-Regular.ttf`,
-    bold: `${baseUrl}/fonts/LibreBaskerville-Bold.ttf`,
-    italics: `${baseUrl}/fonts/LibreBaskerville-Italic.ttf`,
-    bolditalics: `${baseUrl}/fonts/LibreBaskerville-BoldItalic.ttf`,
-  },
-};
-
 const GerarPdf = async ({
   dadosFormulario,
   dadosUsuario,
@@ -38,6 +27,17 @@ const GerarPdf = async ({
     endereco,
     selectedMulta,
     dataFormatada: formatarDataAtual(),
+  };
+
+  const baseUrl = window.location.origin;
+
+  pdfMake.fonts = {
+    LibreBaskerville: {
+      normal: `${baseUrl}/fonts/LibreBaskerville-Regular.ttf`,
+      bold: `${baseUrl}/fonts/LibreBaskerville-Bold.ttf`,
+      italics: `${baseUrl}/fonts/LibreBaskerville-Italic.ttf`,
+      bolditalics: `${baseUrl}/fonts/LibreBaskerville-BoldItalic.ttf`,
+    },
   };
 
   const docDefinitions: TDocumentDefinitions = {
