@@ -19,6 +19,7 @@ const RecursoDashboard = () => {
 
   const [dadosFormulario, setDadosFormulario] = useState<DadosFormulario>({
     tipoDefesa: "" as TipoDefesa,
+    recorreuDefesaPrevia: "",
     fato: "",
     fatoComentario: "",
     tempoNotificacao: "",

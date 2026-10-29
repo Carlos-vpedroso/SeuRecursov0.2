@@ -19,6 +19,7 @@ import { tempoNotificacaoPadrao } from "./tempoNotificacao";
 
 export function recursoTemplate(context: PdfContext): Content[] {
   switch (context.selectedMulta.tipo_recurso) {
+    default:
     case "ADMINISTRATIVO":
       return [
         //INTRODUÇÃO

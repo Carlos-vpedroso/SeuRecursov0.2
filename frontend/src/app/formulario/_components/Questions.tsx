@@ -5,8 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { DadosFormulario } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { MoveLeft, MoveRight } from "lucide-react";
@@ -185,8 +183,6 @@ export default function Questions({
                     ...prev,
                     agente: "NÃO",
                     acessoAuto: "",
-                    patio: "",
-                    patioComentario: "",
                   }))
                 }
                 className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${
@@ -201,8 +197,6 @@ export default function Questions({
                     ...prev,
                     agente: "SIM",
                     acessoAuto: "",
-                    patio: "",
-                    patioComentario: "",
                   }))
                 }
                 className={`hover:border-cor1 max-h-10 cursor-pointer space-y-2 rounded-lg border p-2 text-center transition-all hover:shadow-md ${

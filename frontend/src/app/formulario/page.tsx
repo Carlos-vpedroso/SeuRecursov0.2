@@ -28,20 +28,36 @@ export default function FormularioPage() {
   } = useAuth(RecursoContext);
 
   const progresso = useMemo(() => {
-    const { fatoComentario, acessoAuto, ...dadosFormularioSemComentarios } =
-      dadosFormulario;
+    const {
+      fatoComentario,
+      acessoAuto,
+      recorreuDefesaPrevia,
+      ...dadosFormularioBase
+    } = dadosFormulario;
+
     const { logradouro, numero, bairro, ...enderecoClear } = endereco;
+
     const campos = [
-      ...Object.values(dadosFormularioSemComentarios),
+      ...Object.values(dadosFormularioBase),
+
+      // A pergunta só é obrigatória para JARI
+      ...(dadosFormulario.tipoDefesa === "Jari" ? [recorreuDefesaPrevia] : []),
+
       ...Object.values(dadosUsuario),
       ...Object.values(enderecoClear),
     ];
 
-    const preenchidos = campos.filter(
-      (valor) => valor !== "" && valor !== null && valor !== undefined,
-    ).length;
+    const preenchidos = campos.filter((valor) => {
+      if (valor === "" || valor === null || valor === undefined) {
+        return false;
+      }
 
-    return Math.round((preenchidos / campos.length) * 100);
+      return true;
+    }).length;
+
+    return campos.length === 0
+      ? 0
+      : Math.round((preenchidos / campos.length) * 100);
   }, [dadosFormulario, dadosUsuario, endereco]);
 
   const progressColor =
@@ -85,6 +101,14 @@ export default function FormularioPage() {
               setDadosFormulario((prev) => ({
                 ...prev,
                 tipoDefesa: value,
+                recorreuDefesaPrevia: "",
+              }))
+            }
+            recorreuDefesaPrevia={dadosFormulario.recorreuDefesaPrevia}
+            setRecorreuDefesaPrevia={(value) =>
+              setDadosFormulario((prev) => ({
+                ...prev,
+                recorreuDefesaPrevia: value,
               }))
             }
           />

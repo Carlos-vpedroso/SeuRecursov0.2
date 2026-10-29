@@ -6,18 +6,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { TipoDefesa } from "@/types";
+import { AnimatePresence, motion } from "framer-motion";
 import { MoveRight } from "lucide-react";
 
 type StepProps = {
   onNext: () => void;
   tipoDefesa: TipoDefesa | "";
   setTipoDefesa: (value: TipoDefesa) => void;
+  recorreuDefesaPrevia: "SIM" | "NÃO" | "";
+  setRecorreuDefesaPrevia: (value: "SIM" | "NÃO" | "") => void;
 };
 
 export function TipoDefesaComponent({
   onNext,
   tipoDefesa,
   setTipoDefesa,
+  recorreuDefesaPrevia,
+  setRecorreuDefesaPrevia,
 }: StepProps) {
   const opcoes: { label: string; info: string; value: TipoDefesa }[] = [
     {
@@ -36,7 +41,8 @@ export function TipoDefesaComponent({
       value: "Cetran",
     },
   ];
-  const podeAvancar = tipoDefesa !== "";
+  const podeAvancar =
+    tipoDefesa !== "" && (tipoDefesa !== "Jari" || recorreuDefesaPrevia !== "");
   return (
     <Card className="bg-card flex h-full w-full flex-col justify-between select-none">
       <CardHeader>
@@ -61,6 +67,41 @@ export function TipoDefesaComponent({
             </div>
           ))}
         </div>
+        <AnimatePresence mode="wait">
+          {tipoDefesa === "Jari" && (
+            <motion.div
+              key="pergunta-jari"
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -10 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="overflow-hidden"
+            >
+              <div className="border-border mt-6 space-y-4 rounded-xl border p-5">
+                <h2 className="font-title text-base font-semibold">
+                  Já recorreu na defesa prévia, com a gente anteriormente?
+                </h2>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {(["SIM", "NÃO"] as const).map((resposta) => (
+                    <button
+                      key={resposta}
+                      type="button"
+                      onClick={() => setRecorreuDefesaPrevia(resposta)}
+                      className={`cursor-pointer rounded-lg border p-3 font-medium transition-all ${
+                        recorreuDefesaPrevia === resposta
+                          ? "border-cor1 bg-cor1/10"
+                          : "border-border hover:border-cor1"
+                      }`}
+                    >
+                      {resposta}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardContent>
 
       <CardFooter className="bg-card flex items-center justify-end">

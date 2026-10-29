@@ -1,10 +1,8 @@
 import { FloatingInput } from "@/components/FloatingInput";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { buscarCEP } from "@/lib/utils";
 import { Address, DadosUsuario } from "@/types";
-import { Check, MoveLeft, MoveRight, Text, User } from "lucide-react";
+import { Check, MoveLeft, Text, User } from "lucide-react";
 
 type StepProps = {
     onBack: () => void;

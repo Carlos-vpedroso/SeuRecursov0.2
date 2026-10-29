@@ -1,31 +1,29 @@
+export type TipoDefesa = "Defesa Prévia" | "Jari" | "Cetran";
+
 export type MetadataInput = {
   dadosFormulario: {
-    tipoDefesa: string;
-    fato: string;
+    tipoDefesa: TipoDefesa;
+    recorreuDefesaPrevia: "SIM" | "NÃO" | "";
+    fato: "SIM" | "NÃO" | "";
     fatoComentario: string;
-    notificado: string;
-    tempoNotificacao: string;
-    agente: string;
-    acessoAuto: string;
-    patio: string;
-    patioComentario: string;
+    tempoNotificacao: "SIM" | "NÃO" | "";
+    agente: "SIM" | "NÃO" | "";
+    acessoAuto: "SIM" | "NÃO" | "";
   };
   dadosUsuario: {
     nome: string;
     cpf: string;
     rg: string;
     celular: string;
-    ufEmissao: string;
     autoInfracao: string;
     placaVeiculo: string;
-    tipoUsuario: string;
     solicitante: string;
   };
   endereco: {
     cep: string;
-    logradouro: string;
-    numero: string;
-    bairro: string;
+    logradouro?: string;
+    numero?: string;
+    bairro?: string;
     cidade: string;
     uf: string;
   };

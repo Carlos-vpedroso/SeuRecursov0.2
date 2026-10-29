@@ -2,11 +2,12 @@ import { UUID } from "node:crypto";
 
 export interface DadosFormulario {
   tipoDefesa: TipoDefesa;
-  fato: string;
+  recorreuDefesaPrevia: "SIM" | "NÃO" | "";
+  fato: "SIM" | "NÃO" | "";
   fatoComentario: string;
-  tempoNotificacao: string;
-  agente: string;
-  acessoAuto: string;
+  tempoNotificacao: "SIM" | "NÃO" | "";
+  agente: "SIM" | "NÃO" | "";
+  acessoAuto: "SIM" | "NÃO" | "";
 }
 
 export type TipoDefesa = "Defesa Prévia" | "Jari" | "Cetran";
@@ -29,7 +30,8 @@ export type TipoMulta = "LEVE" | "MEDIA" | "GRAVE" | "GRAVISSIMA";
 export type TipoRecurso =
   | "ADMINISTRATIVO"
   | "ADMINISTRATIVO_EQUIPAMENTO"
-  | "VELOCIDADE";
+  | "VELOCIDADE"
+  | "BAFOMETRO";
 
 export interface Recurso {
   id: UUID;

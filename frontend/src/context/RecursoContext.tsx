@@ -19,45 +19,6 @@ interface RecursoContextType {
 export const RecursoContext = createContext<RecursoContextType | undefined>(
   undefined,
 );
-// {
-//     multas: [],
-//     selectedMulta: null,
-//     setSelectedMulta: () => undefined,
-//     loading: false,
-//     dadosFormulario: {
-//         tipoDefesa: '',
-//         fato: '',
-//         fatoComentario: '',
-//         notificado: '',
-//         tempoNotificacao: '',
-//         agente: '',
-//         acessoAuto: '',
-//         patio: '',
-//         patioComentario: ''
-//     },
-//     setDadosFormulario: () => undefined,
-//     dadosUsuario: {
-//         nome: "",
-//         cpf: "",
-//         rg: "",
-//         celular: "",
-//         ufEmissao: "",
-//         autoInfracao: "",
-//         placaVeiculo: "",
-//         tipoUsuario: "",
-//         solicitante: "",
-//     },
-//     setDadosUsuario: () => undefined,
-//     endereco: {
-//         cep: "",
-//         logradouro: "",
-//         numero: "",
-//         bairro: "",
-//         cidade: "",
-//         uf: ""
-//     },
-//     setEndereco: () => undefined,
-// }
 
 interface RecursoProviderProps {
   children: ReactNode;
@@ -68,6 +29,7 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
   const [selectedMulta, setSelectedMulta] = useState<Multa | null>(null);
   const [dadosFormulario, setDadosFormulario] = useState<DadosFormulario>({
     tipoDefesa: "Defesa Prévia",
+    recorreuDefesaPrevia: "",
     fato: "",
     fatoComentario: "",
     tempoNotificacao: "",
@@ -126,15 +88,13 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
           setSelectedMulta(data.selectedMulta ?? null);
           setDadosFormulario(
             data.dadosFormulario ?? {
-              tipoDefesa: "",
+              tipoDefesa: "Defesa Prévia",
+              recorreuDefesaPrevia: "",
               fato: "",
               fatoComentario: "",
-              notificado: "",
               tempoNotificacao: "",
               agente: "",
               acessoAuto: "",
-              patio: "",
-              patioComentario: "",
             },
           );
 
@@ -144,10 +104,8 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
               cpf: "",
               rg: "",
               celular: "",
-              ufEmissao: "",
               autoInfracao: "",
               placaVeiculo: "",
-              tipoUsuario: "",
               solicitante: "",
             },
           );
