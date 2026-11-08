@@ -7,6 +7,13 @@ import { NumberTicker } from "@/components/ui/number-ticker";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa6";
+import {
+  EMAIL,
+  FACEBOOK_LINK,
+  FORMATED_PHONE_NUMBER,
+  INSTAGRAM_LINK,
+  WHATSAPP_LINK,
+} from "../config";
 
 export default function Footer() {
   return (
@@ -184,19 +191,22 @@ export default function Footer() {
 
             <div className="flex gap-3">
               <a
-                href="#"
+                href={WHATSAPP_LINK}
+                target="_blank"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
                 <FaWhatsapp className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
               </a>
               <a
-                href="#"
+                href={INSTAGRAM_LINK}
+                target="_blank"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
                 <FaInstagram className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
               </a>
               <a
-                href="#"
+                href={FACEBOOK_LINK}
+                target="_blank"
                 className="group hover:bg-cor2 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 backdrop-blur-sm transition-all"
               >
                 <FaFacebook className="text-texto/60 group-hover:text-texto h-5 w-5 transition-colors" />
@@ -271,13 +281,18 @@ export default function Footer() {
               <li className="text-texto/60 flex items-center justify-center gap-3 text-sm">
                 <Phone className="text-cor2 h-5 w-5 shrink-0" />
 
-                <span>(35) 9 9999-9999</span>
+                <span>{FORMATED_PHONE_NUMBER}</span>
               </li>
 
               <li className="text-texto/60 flex items-center justify-center gap-3 text-sm">
                 <Mail className="text-cor2 h-5 w-5 shrink-0" />
 
-                <span>contato@derrubamulta.com</span>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="hover:text-cor2 transition-colors"
+                >
+                  {EMAIL}
+                </a>
               </li>
             </ul>
           </div>
