@@ -35,6 +35,8 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
     tempoNotificacao: "",
     agente: "",
     acessoAuto: "",
+    detalhamentoEtilometro: "",
+    etilometroCondutorRetirada: "",
   });
   const [dadosUsuario, setDadosUsuario] = useState<DadosUsuario>({
     nome: "",
@@ -86,17 +88,18 @@ export const RecursoProvider = ({ children }: RecursoProviderProps) => {
           const data = JSON.parse(saved);
 
           setSelectedMulta(data.selectedMulta ?? null);
-          setDadosFormulario(
-            data.dadosFormulario ?? {
-              tipoDefesa: "Defesa Prévia",
-              recorreuDefesaPrevia: "",
-              fato: "",
-              fatoComentario: "",
-              tempoNotificacao: "",
-              agente: "",
-              acessoAuto: "",
-            },
-          );
+          setDadosFormulario({
+            tipoDefesa: "Defesa Prévia",
+            recorreuDefesaPrevia: "",
+            fato: "",
+            fatoComentario: "",
+            tempoNotificacao: "",
+            agente: "",
+            acessoAuto: "",
+            detalhamentoEtilometro: "",
+            etilometroCondutorRetirada: "",
+            ...data.dadosFormulario,
+          });
 
           setDadosUsuario(
             data.dadosUsuario ?? {

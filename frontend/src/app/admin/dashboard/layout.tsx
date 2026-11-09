@@ -9,11 +9,12 @@ export default function DashboardLayout({
 }>) {
   return (
     <DashboardProvider>
-      <Suspense fallback={null}>
-        <div className="bg-fundo2 text-texto2 block min-h-screen lg:flex">
+      <Suspense fallback={<div>Carregando...</div>}>
+        <div className="bg-fundo2 text-texto2 flex h-dvh min-h-0 w-full min-w-0 flex-col overflow-hidden lg:flex-row">
           <SidebarMenu />
-
-          {children}
+          <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+            {children}
+          </div>
         </div>
       </Suspense>
     </DashboardProvider>

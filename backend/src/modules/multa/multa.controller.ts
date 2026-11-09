@@ -226,6 +226,7 @@ export class MultaController {
           "ADMINISTRATIVO",
           "ADMINISTRATIVO_EQUIPAMENTO",
           "VELOCIDADE",
+          "BAFOMETRO",
         ];
 
         if (!tiposValidos.includes(tipo_recurso)) {

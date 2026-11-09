@@ -9,6 +9,8 @@ export type MetadataInput = {
     tempoNotificacao: "SIM" | "NÃO" | "";
     agente: "SIM" | "NÃO" | "";
     acessoAuto: "SIM" | "NÃO" | "";
+    detalhamentoEtilometro: "SIM" | "NÃO" | "";
+    etilometroCondutorRetirada: "SIM" | "NÃO" | "";
   };
   dadosUsuario: {
     nome: string;

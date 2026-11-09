@@ -3,13 +3,6 @@ import prisma from "../../config/prisma";
 import { MetadataInput } from "../../types/metaDataInput";
 import { decrypt } from "../../utils/criptografia";
 
-type RecursoComSensitiveData = {
-  nome: string;
-  autoInfracao: string;
-  createdAt: Date;
-  sensitiveData: MetadataInput;
-};
-
 export class RecursoService {
   // Buscar por ID
   async findById(id: string, userId: string): Promise<Recurso | null> {

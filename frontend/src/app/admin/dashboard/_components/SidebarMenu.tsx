@@ -99,9 +99,9 @@ export default function SidebarMenu() {
   };
 
   return (
-    <div className="flex h-auto">
+    <div className="flex min-h-0 w-full shrink-0 lg:h-full lg:w-[260px]">
       {/* Mobile Header */}
-      <header className="bg-fundo text-texto flex h-16 w-full items-center justify-between border-b px-4 shadow-md lg:hidden">
+      <header className="bg-fundo text-texto flex h-16 w-full min-w-0 shrink-0 items-center justify-between border-b px-4 shadow-md lg:hidden">
         <button
           onClick={() => handleNavigation("Dashboard")}
           className="flex items-center gap-2"
@@ -140,13 +140,13 @@ export default function SidebarMenu() {
 
       {/* Sidebar */}
       <aside
-        className={`h-full w-[260px] shrink-0 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:z-50 max-lg:transition-transform max-lg:duration-300 lg:relative lg:translate-x-0 ${
+        className={`h-dvh min-h-0 w-[260px] max-w-full shrink-0 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:z-50 max-lg:transition-transform max-lg:duration-300 lg:relative lg:h-full lg:translate-x-0 ${
           open ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"
         } `}
       >
         <div className="bg-fundo text-texto flex h-full flex-col border-r border-white/10">
           {/* Logo */}
-          <div className="flex h-20 items-center border-b border-white/10 px-6">
+          <div className="flex h-20 shrink-0 items-center border-b border-white/10 px-6">
             <button
               onClick={() => handleNavigation("Dashboard")}
               className="flex items-center gap-3"
@@ -174,7 +174,7 @@ export default function SidebarMenu() {
           </div>
 
           {/* Navigation */}
-          <div className="flex-1 overflow-y-auto px-4 py-6">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-6">
             {/* Principal */}
             <div>
               <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.2em] text-zinc-600 uppercase">
@@ -253,7 +253,7 @@ export default function SidebarMenu() {
           </div>
 
           {/* User */}
-          <div className="border-t border-white/10 p-4">
+          <div className="shrink-0 border-t border-white/10 p-4">
             <div className="flex items-center gap-3 rounded-xl p-2 transition select-none">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-700 text-sm font-bold">
                 {!showUser ? (

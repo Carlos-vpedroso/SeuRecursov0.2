@@ -111,6 +111,7 @@ const MultasDashboard = () => {
       label: "Administrativo + Equipamento Medidor",
     },
     { value: "VELOCIDADE", label: "Velocidade" },
+    { value: "BAFOMETRO", label: "Bafômetro" },
   ];
 
   const handleEdit = (multa: Multa) => {

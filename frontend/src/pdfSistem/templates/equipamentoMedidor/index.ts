@@ -3,7 +3,7 @@ import type { Content } from "pdfmake/interfaces";
 export function equipamentoMedidorPadrao(): Content[] {
   return [
     {
-      text: "3. DO EQUIPAMENTO",
+      text: "DO EQUIPAMENTO",
       style: "paragrafosBold",
     },
     {

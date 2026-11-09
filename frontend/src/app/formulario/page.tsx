@@ -7,13 +7,13 @@ import { useAuth } from "@/hook/useAuth";
 import { Progress } from "@/components/ui/progress";
 import { AnimatePresence, motion } from "framer-motion";
 import { TipoDefesaComponent } from "./_components/TipoDefesa";
-import Questions from "./_components/Questions";
 import InfoUsuario from "./_components/InfoUsuario";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import ContextoVazio from "@/components/ContextoVazio";
 import Link from "next/link";
 import LoadingScreen from "@/components/LoadingScreen";
+import QuestionsPadrao from "./_components/QuestionsPadrao";
 
 export default function FormularioPage() {
   const {
@@ -32,6 +32,8 @@ export default function FormularioPage() {
       fatoComentario,
       acessoAuto,
       recorreuDefesaPrevia,
+      detalhamentoEtilometro,
+      etilometroCondutorRetirada,
       ...dadosFormularioBase
     } = dadosFormulario;
 
@@ -42,6 +44,11 @@ export default function FormularioPage() {
 
       // A pergunta só é obrigatória para JARI
       ...(dadosFormulario.tipoDefesa === "Jari" ? [recorreuDefesaPrevia] : []),
+
+      // Perguntas específicas para recursos de bafômetro
+      ...(selectedMulta?.tipo_recurso === "BAFOMETRO"
+        ? [detalhamentoEtilometro, etilometroCondutorRetirada]
+        : []),
 
       ...Object.values(dadosUsuario),
       ...Object.values(enderecoClear),
@@ -58,7 +65,7 @@ export default function FormularioPage() {
     return campos.length === 0
       ? 0
       : Math.round((preenchidos / campos.length) * 100);
-  }, [dadosFormulario, dadosUsuario, endereco]);
+  }, [dadosFormulario, dadosUsuario, endereco, selectedMulta]);
 
   const progressColor =
     progresso < 30
@@ -116,13 +123,18 @@ export default function FormularioPage() {
 
       case 2:
         return (
-          <Questions
+          <QuestionsPadrao
             onNext={() => setStep(3)}
             onBack={() => setStep(1)}
             fato={dadosFormulario.fato}
             tempoNotificacao={dadosFormulario.tempoNotificacao}
             agente={dadosFormulario.agente}
             acessoAuto={dadosFormulario.acessoAuto}
+            detalhamentoEtilometro={dadosFormulario.detalhamentoEtilometro}
+            etilometroCondutorRetirada={
+              dadosFormulario.etilometroCondutorRetirada
+            }
+            isBafometro={selectedMulta?.tipo_recurso === "BAFOMETRO"}
             comentarios={{
               fato: dadosFormulario.fatoComentario,
             }}

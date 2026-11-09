@@ -8,6 +8,8 @@ export interface DadosFormulario {
   tempoNotificacao: "SIM" | "NÃO" | "";
   agente: "SIM" | "NÃO" | "";
   acessoAuto: "SIM" | "NÃO" | "";
+  detalhamentoEtilometro: "SIM" | "NÃO" | "";
+  etilometroCondutorRetirada: "SIM" | "NÃO" | "";
 }
 
 export type TipoDefesa = "Defesa Prévia" | "Jari" | "Cetran";
