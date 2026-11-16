@@ -19,7 +19,7 @@ export function headerPadrao({ dadosUsuario }: PdfContext): Content[] {
     {
       text: [
         "Recorrente: ",
-        { text: `${dadosUsuario.solicitante}`, style: "textBold" },
+        { text: `${dadosUsuario.nome}`, style: "textBold" },
       ],
       style: "textBold",
     },
